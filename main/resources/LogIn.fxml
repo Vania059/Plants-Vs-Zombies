@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.plantsvszombies.SceneController">
+   <children>
+      <ImageView fitHeight="540.0" fitWidth="960.0">
+         <image>
+            <Image url="@Screen/MBackground.jpg" />
+         </image>
+      </ImageView>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="336.0" layoutY="72.0" prefHeight="84.0" prefWidth="308.0" style="-fx-background-color: #8B4513; -fx-background-radius: 10; -fx-padding: 8;" text="Log In" textAlignment="CENTER" textFill="#adbe2e">
+         <font>
+            <Font size="50.0" />
+         </font>
+      </Label>
+      <TextField fx:id="usernameTextField" layoutX="312.0" layoutY="226.0" prefHeight="53.0" prefWidth="356.0" promptText="Username">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </TextField>
+      <Button layoutX="539.0" layoutY="351.0" mnemonicParsing="false" onAction="#handleLogIn" prefHeight="53.0" prefWidth="121.0" text="Log in">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button fx:id="backButton" layoutX="327.0" layoutY="351.0" mnemonicParsing="false" onAction="#switchToSecondScreen" prefHeight="53.0" prefWidth="121.0" text="Back">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

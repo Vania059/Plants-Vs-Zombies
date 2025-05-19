@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="gamePane" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.plantsvszombies.Level1Controller">
+   <children>
+      <ImageView fitHeight="562.0" fitWidth="1120.0" layoutX="-160.0">
+         <image>
+            <Image url="@Screen/Background1.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="78.0" fitWidth="367.0" layoutX="22.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Screen/Bar.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="sunCount" alignment="CENTER" contentDisplay="CENTER" layoutX="34.0" layoutY="56.0" prefHeight="19.0" prefWidth="41.0" />
+   </children>
+</AnchorPane>
