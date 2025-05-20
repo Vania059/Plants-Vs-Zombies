@@ -4,6 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="9777a206-8e06-42b0-aab4-ac1ee337a200" name="Changes" comment="delete old code">
       <change beforePath="$PROJECT_DIR$/src/Plants-Vs-Zombies/Bullet.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Plants-Vs-Zombies/Gif/boss_zombie_die.gif" beforeDir="false" />
@@ -67,6 +68,9 @@
       <change beforePath="$PROJECT_DIR$/src/Plants-Vs-Zombies/pea.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Plants-Vs-Zombies/sun.png" beforeDir="false" />
     </list>
+=======
+    <list default="true" id="9777a206-8e06-42b0-aab4-ac1ee337a200" name="Changes" comment="" />
+>>>>>>> 81adcb8787e29b0e5cb7f50485bd6b4b2650b326
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -81,7 +85,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+<<<<<<< HEAD
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/src/Plants-Vs-Zombies" />
+=======
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/Plants-Vs-Zombies" />
+>>>>>>> 81adcb8787e29b0e5cb7f50485bd6b4b2650b326
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
@@ -101,6 +109,7 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+<<<<<<< HEAD
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.PlayGame.executor": "Run",
@@ -130,11 +139,41 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Java\PlantsVsZombies\src" />
       <recent name="D:\Java\PlantsVsZombies" />
+=======
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.PlayGame.executor&quot;: &quot;Run&quot;,
+    &quot;Application.PvZGame.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Java/PlantsVsZombies&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.48735633&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.repository.indices&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Java\PlantsVsZombies" />
+      <recent name="D:\Java\PlantsVsZombies\src" />
+>>>>>>> 81adcb8787e29b0e5cb7f50485bd6b4b2650b326
       <recent name="D:\Java\PlantsVsZombies\Plants-Vs-Zombies\src" />
       <recent name="D:\Java\PlantsVsZombies\Plants-Vs-Zombies" />
     </key>
   </component>
+<<<<<<< HEAD
   <component name="RunManager" selected="Application.PvZGame">
+=======
+  <component name="RunManager" selected="Application.PlayGame">
+>>>>>>> 81adcb8787e29b0e5cb7f50485bd6b4b2650b326
     <configuration name="PlayGame" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.plantsvszombies.PlayGame" />
       <module name="PlantsVsZombies" />
@@ -191,6 +230,7 @@
       <workItem from="1747536004462" duration="3431000" />
       <workItem from="1747539463070" duration="9891000" />
       <workItem from="1747669362638" duration="4453000" />
+<<<<<<< HEAD
       <workItem from="1747696166366" duration="2345000" />
       <workItem from="1747724593496" duration="27000" />
       <workItem from="1747724637183" duration="30000" />
@@ -202,6 +242,9 @@
       <workItem from="1747730086035" duration="13000" />
       <workItem from="1747730126616" duration="50000" />
       <workItem from="1747730410022" duration="17000" />
+=======
+      <workItem from="1747696166366" duration="1395000" />
+>>>>>>> 81adcb8787e29b0e5cb7f50485bd6b4b2650b326
     </task>
     <servers />
   </component>
