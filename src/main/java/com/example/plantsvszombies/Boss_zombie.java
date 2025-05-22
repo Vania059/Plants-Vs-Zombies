@@ -4,12 +4,14 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
+import java.awt.*;
+
 public class Boss_zombie extends Zombie {
     int x;
     int y;
     public Boss_zombie(int x, int y) {
         super (
-                "/Zombies/boss_zombie_walk.gif",
+                "/Zombies/normal_zombie_walk.gif",
                 "/Zombies/boss_zombie_hit.gif",
                 "/Zombies/boss_zombie_die.gif",
                 "/Audio/boss_zombie_voice.mp3",

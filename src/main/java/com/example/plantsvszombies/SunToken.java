@@ -23,8 +23,8 @@ public class SunToken {
                 getClass().getResourceAsStream("/Plants/sun.png")
         );
         sunView = new ImageView(sunImage);
-        sunView.setFitWidth(30);
-        sunView.setFitHeight(30);
+        sunView.setFitWidth(60);
+        sunView.setFitHeight(60);
         sunView.setX(x - 15);
         sunView.setY(y - 15);
 
@@ -56,7 +56,7 @@ public class SunToken {
 
     private void dropFromSky() {
         Random random = new Random();
-        double maxDrop = 500 - sunView.getY();
+        double maxDrop = 540 - sunView.getY();
         double distance = 100 + random.nextDouble() * (maxDrop - 100);
 
         TranslateTransition drop = new TranslateTransition(

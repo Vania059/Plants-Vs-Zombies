@@ -24,12 +24,12 @@ public abstract class Zombie {
 
 
     public Zombie(String walkGifPath, String eatGifPath, String deadGifPath, String soundPath, String eatingSoundPath, int HP, double speed, int x, int y, boolean isWalking) {
-        this.walkImage = new Image(walkGifPath);
-        this.eatImage = new Image(eatGifPath);
+        this.walkImage = new Image(getClass().getResource(walkGifPath).toExternalForm());;
+        this.eatImage = new Image(getClass().getResource(eatGifPath).toExternalForm());;
         this.imageView = new ImageView(walkImage);
-        this.deadImage = new Image(deadGifPath);
-        this.imageView.setFitWidth(150);
-        this.imageView.setFitHeight(150);
+        this.deadImage = new Image(getClass().getResource(deadGifPath).toExternalForm());;
+        this.imageView.setFitWidth(200);
+        this.imageView.setFitHeight(200);
         this.imageView.setPreserveRatio(true);
         this.imageView.setX(x);
         this.imageView.setY(y);

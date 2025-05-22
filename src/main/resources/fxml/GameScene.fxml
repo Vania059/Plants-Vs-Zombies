@@ -5,18 +5,18 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="gamePane" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.plantsvszombies.GameSceneController">
+<AnchorPane fx:id="gamePane" maxHeight="540.0" maxWidth="960.0" minHeight="540.0" minWidth="960.0" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.plantsvszombies.GameSceneController">
    <children>
-      <ImageView fitHeight="540.0" fitWidth="960.0">
+      <ImageView fitHeight="540.0" fitWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
             <Image url="@../Screen/Background1.jpg" />
          </image>
       </ImageView>
-      <ImageView fitHeight="78.0" fitWidth="367.0" layoutX="190.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="bar" fitHeight="74.0" fitWidth="500.0" layoutX="181.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Screen/Bar.png" />
          </image>
       </ImageView>
-      <Label fx:id="sunCount" alignment="CENTER" contentDisplay="CENTER" layoutX="201.0" layoutY="54.0" prefHeight="19.0" prefWidth="41.0" />
+      <Label fx:id="sunLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="191.0" layoutY="54.0" prefHeight="19.0" prefWidth="51.0" />
    </children>
 </AnchorPane>

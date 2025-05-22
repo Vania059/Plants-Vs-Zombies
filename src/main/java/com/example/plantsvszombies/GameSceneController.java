@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
@@ -13,6 +14,7 @@ import java.util.*;
 public class GameSceneController implements Initializable {
 
     @FXML private AnchorPane gamePane;
+    @FXML private Label sunLabel;
 
     private List<Normal_zombie> zombies = new ArrayList<>();
     private Tile[][] grid = new Tile[5][9];
@@ -44,6 +46,7 @@ public class GameSceneController implements Initializable {
         }
     }
 
+    // chưa sửa
     private void spawnPlants() {
         // Thêm 1 Peashooter và 1 Sunflower để test
         Peashooter peashooter = new Peashooter(grid[2][2], gamePane);
@@ -53,25 +56,36 @@ public class GameSceneController implements Initializable {
         gamePane.getChildren().addAll(sunflower.getNodes());
     }
 
+    // Thư sửa
     private void spawnZombies() {
-        int[] lanesY = {100, 200, 300}; // 3 hàng cho level 1
+        int[] lanesY = {100, 200, 300, 400};
+        Random rand = new Random();
+        int x = 1000; // vị trí ngoài scene
 
-        for (int i = 0; i < 3; i++) {
-            int x = 1000 + i * 100;
-            int y = lanesY[i % lanesY.length];
+        // Spawn lần đầu
+        for(int i = 0; i < 3; i++) {
+            int randomLaneIndex = rand.nextInt(lanesY.length);
+            int y = lanesY[randomLaneIndex];
             Normal_zombie zombie = new Normal_zombie(x, y);
             zombies.add(zombie);
             gamePane.getChildren().add(zombie.getView());
+            zombie.startWalking();
+            zombie.moveToPlant(150);
         }
 
-        Timeline delay = new Timeline(new KeyFrame(Duration.seconds(10), e -> {
-            for (Normal_zombie zombie : zombies) {
+        Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(20), e -> {
+            for(int i = 0; i < 3; i++) { // mỗi lần spawn 3 zombie
+                int randomLaneIndex = rand.nextInt(lanesY.length);
+                int spawnY = lanesY[randomLaneIndex];
+                Normal_zombie zombie = new Normal_zombie(x, spawnY);
+                zombies.add(zombie);
+                gamePane.getChildren().add(zombie.getView());
                 zombie.startWalking();
                 zombie.moveToPlant(150);
             }
         }));
-        delay.setCycleCount(1);
-        delay.play();
+        spawnTimeline.setCycleCount(10); // hoặc Timeline.INDEFINITE nếu muốn spawn mãi
+        spawnTimeline.play();
     }
 
     private void startSkySun() {
@@ -80,7 +94,7 @@ public class GameSceneController implements Initializable {
             int col = random.nextInt(9);
             int row = random.nextInt(5);
             Tile tile = grid[row][col];
-            new SunToken(tile.getCenterX(), tile.getCenterY() - 40, gamePane, this, false);
+            new SunToken(tile.getCenterX(), tile.getCenterY() - 540, gamePane, this, false);
         }));
         skySun.setCycleCount(Timeline.INDEFINITE);
         skySun.play();
@@ -88,6 +102,6 @@ public class GameSceneController implements Initializable {
 
     public void addSunPoints(int points) {
         sunPoints += points;
-        System.out.println("Sun points: " + sunPoints);
+        sunLabel.setText("" + sunPoints);
     }
 }

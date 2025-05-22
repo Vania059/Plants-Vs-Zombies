@@ -157,4 +157,12 @@ public class SceneController {
             stage.close();
         }
     }
+    public void switchToGameScene (javafx.event.ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/GameScene.fxml"));
+        scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/fxml/GameScene.css").toExternalForm());
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
 }
