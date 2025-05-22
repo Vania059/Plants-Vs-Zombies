@@ -37,17 +37,17 @@ public class PlantCard {
         String imagePath;
         switch (plantType.toLowerCase()) {
             case "walnut":
-                imagePath = "/walnutcard.png";
+                imagePath = "/Plants/wallnutcard.png";
                 break;
             case "peashooter":
-                imagePath = "/peashootercard.png";
+                imagePath = "/Plants/peashootercard.png";
                 break;
             case "cherrybomb":
-                imagePath = "/cherrybombcard.png";
+                imagePath = "/Plants/cherrybombcard.png";
                 break;
             case "sunflower":
             default:
-                imagePath = "/sunflowercard.png";
+                imagePath = "/Plants/sunflowercard.png";
                 break;
         }
 

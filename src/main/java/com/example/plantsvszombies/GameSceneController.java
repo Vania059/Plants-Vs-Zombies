@@ -32,13 +32,15 @@ public class GameSceneController implements Initializable {
 
         plantCards = new ArrayList<>();
 
-        PlantCard peashooterCard = new PlantCard(10, "Peashooter", 100, gamePane , this);
-        PlantCard sunflowerCard = new PlantCard(100, "Sunflower", 50, gamePane, this);
-        PlantCard wallnutCard = new PlantCard(190, "Walnut", 50, gamePane, this);
+        PlantCard peashooterCard = new PlantCard(250, "peashooter", 100, gamePane , this);
+        PlantCard sunflowerCard = new PlantCard(340, "sunflower", 50, gamePane, this);
+        PlantCard wallnutCard = new PlantCard(430, "walnut", 150, gamePane, this);
+        PlantCard cherrybombCard = new PlantCard(520, "cherrybomb", 175, gamePane, this);
 
         plantCards.add(peashooterCard);
         plantCards.add(sunflowerCard);
         plantCards.add(wallnutCard);
+        plantCards.add(cherrybombCard);
 
         // Sau đó cập nhật trạng thái theo điểm mặt trời
         updatePlantCards();
