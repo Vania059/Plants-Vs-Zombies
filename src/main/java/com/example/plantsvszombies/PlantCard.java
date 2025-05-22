@@ -58,8 +58,8 @@ public class PlantCard {
                 throw new Exception("Image loading error");
             }
             ImageView imageView = new ImageView(image);
-            imageView.setFitWidth(80);
-            imageView.setFitHeight(64);
+            imageView.setFitWidth(70);
+            imageView.setFitHeight(50);
             imageView.setX(x);
             imageView.setY(10);
             plantImage = imageView;

@@ -1,11 +1,14 @@
 package com.example.plantsvszombies;
 
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -33,9 +36,9 @@ public class GameSceneController implements Initializable {
         plantCards = new ArrayList<>();
 
         PlantCard peashooterCard = new PlantCard(250, "peashooter", 100, gamePane , this);
-        PlantCard sunflowerCard = new PlantCard(340, "sunflower", 50, gamePane, this);
-        PlantCard wallnutCard = new PlantCard(430, "walnut", 150, gamePane, this);
-        PlantCard cherrybombCard = new PlantCard(520, "cherrybomb", 175, gamePane, this);
+        PlantCard sunflowerCard = new PlantCard(330, "sunflower", 50, gamePane, this);
+        PlantCard wallnutCard = new PlantCard(410, "walnut", 150, gamePane, this);
+        PlantCard cherrybombCard = new PlantCard(490, "cherrybomb", 175, gamePane, this);
 
         plantCards.add(peashooterCard);
         plantCards.add(sunflowerCard);
@@ -62,30 +65,43 @@ public class GameSceneController implements Initializable {
         Random rand = new Random();
         int x = 1000; // vị trí ngoài scene
 
-        // Spawn lần đầu
-        for(int i = 0; i < 3; i++) {
-            int randomLaneIndex = rand.nextInt(lanesY.length);
-            int y = lanesY[randomLaneIndex];
-            Normal_zombie zombie = new Normal_zombie(x, y);
-            zombies.add(zombie);
-            gamePane.getChildren().add(zombie.getView());
-            zombie.startWalking();
-            zombie.moveToPlant(150);
-        }
-
+        // Tạo Timeline spawn zombie
         Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(20), e -> {
-            for(int i = 0; i < 3; i++) { // mỗi lần spawn 3 zombie
+            for (int i = 0; i < 3; i++) {
                 int randomLaneIndex = rand.nextInt(lanesY.length);
-                int spawnY = lanesY[randomLaneIndex];
-                Normal_zombie zombie = new Normal_zombie(x, spawnY);
+                int y = lanesY[randomLaneIndex];
+                Normal_zombie zombie = new Normal_zombie(x, y);
                 zombies.add(zombie);
                 gamePane.getChildren().add(zombie.getView());
                 zombie.startWalking();
                 zombie.moveToPlant(150);
             }
         }));
-        spawnTimeline.setCycleCount(10); // hoặc Timeline.INDEFINITE nếu muốn spawn mãi
-        spawnTimeline.play();
+        spawnTimeline.setCycleCount(10); // hoặc Timeline.INDEFINITE nếu muốn lặp mãi
+
+        // Tạo PauseTransition 15s trước khi bắt đầu spawn
+        PauseTransition delay = new PauseTransition(Duration.seconds(15));
+        delay.setOnFinished(event -> {
+            // Spawn lần đầu sau 15s
+            Media media = new Media(PlayGame.class.getResource("/Audio/zombies_coming.mp3").toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            for (int i = 0; i < 3; i++) {
+                int randomLaneIndex = rand.nextInt(lanesY.length);
+                int y = lanesY[randomLaneIndex];
+                Normal_zombie zombie = new Normal_zombie(x, y);
+                zombies.add(zombie);
+                gamePane.getChildren().add(zombie.getView());
+                zombie.startWalking();
+                zombie.moveToPlant(150);
+            }
+
+            // Bắt đầu Timeline sau lần spawn đầu tiên
+            spawnTimeline.play();
+        });
+
+        // Bắt đầu đếm 15s
+        delay.play();
     }
 
     private void startSkySun() {
@@ -94,7 +110,7 @@ public class GameSceneController implements Initializable {
             int col = random.nextInt(9);
             int row = random.nextInt(5);
             Tile tile = grid[row][col];
-            new SunToken(tile.getCenterX(), tile.getCenterY() - 540, gamePane, this, false);
+            new SunToken(tile.getCenterX(), tile.getCenterY() - 530, gamePane, this, false);
         }));
         skySun.setCycleCount(Timeline.INDEFINITE);
         skySun.play();

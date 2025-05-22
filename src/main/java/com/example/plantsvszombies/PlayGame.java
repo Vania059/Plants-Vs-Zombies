@@ -13,6 +13,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -59,6 +61,9 @@ public class PlayGame extends Application {
     }
 
     public static void main(String[] args) {
+        Media media = new Media(PlayGame.class.getResource("/Audio/Crazy Dave (Intro Theme).mp3").toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();
         launch(args);
     }
 }

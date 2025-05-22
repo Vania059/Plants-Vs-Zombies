@@ -56,7 +56,7 @@ public class SunToken {
 
     private void dropFromSky() {
         Random random = new Random();
-        double maxDrop = 540 - sunView.getY();
+        double maxDrop = 530 - sunView.getY();
         double distance = 100 + random.nextDouble() * (maxDrop - 100);
 
         TranslateTransition drop = new TranslateTransition(

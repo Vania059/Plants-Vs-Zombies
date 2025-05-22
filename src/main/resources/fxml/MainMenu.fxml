@@ -11,16 +11,17 @@
    <children>
       <ImageView fitHeight="540.0" fitWidth="960.0">
          <image>
-            <Image url="@../Screen/MBackground.jpg" />
+            <Image url="@../Screen/MainMenu.png" />
          </image>
       </ImageView>
-      <Label fx:id="welcomeLabel" alignment="CENTER" contentDisplay="TOP" graphicTextGap="1.0" layoutX="250.0" layoutY="45.0" opacity="0.88" prefHeight="101.0" prefWidth="459.0" style="-fx-background-color: #8B4513; -fx-background-radius: 10;" text="Welcome " textFill="#8ecc1a" wrapText="true">
+      <Button layoutX="767.0" layoutY="444.0" mnemonicParsing="false" opacity="0.0" prefHeight="56.0" prefWidth="67.0" text="Settings" />
+      <Button layoutX="53.0" layoutY="345.0" mnemonicParsing="false" onAction="#exit" opacity="0.0" prefHeight="87.0" prefWidth="166.0" text="Exit" textFill="TRANSPARENT" />
+      <Button layoutX="589.0" layoutY="238.0" mnemonicParsing="false" onAction="#switchToGameScene" opacity="0.0" prefHeight="99.0" prefWidth="178.0" text="Start New Game" />
+      <Button layoutX="26.0" layoutY="162.0" mnemonicParsing="false" onAction="#switchToWelcomeScene" opacity="0.0" prefHeight="25.0" prefWidth="301.0" text="Log In Again" />
+      <Label fx:id="welcomeLabel" alignment="CENTER" contentDisplay="TOP" graphicTextGap="1.0" layoutX="121.0" layoutY="95.0" opacity="0.88" prefHeight="30.0" prefWidth="112.0" text=" " textFill="#000000" wrapText="true">
          <font>
-            <Font name="System Bold" size="20.0" />
+            <Font name="System Bold" size="10.0" />
          </font>
       </Label>
-      <Button layoutX="364.0" layoutY="224.0" mnemonicParsing="false" onAction="#switchToGameScene" prefHeight="56.0" prefWidth="231.0" text="Start New Game" />
-      <Button layoutX="364.0" layoutY="372.0" mnemonicParsing="false" onAction="#exit" prefHeight="56.0" prefWidth="231.0" text="Exit" />
-      <Button layoutX="364.0" layoutY="297.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="231.0" text="Settings" />
    </children>
 </AnchorPane>

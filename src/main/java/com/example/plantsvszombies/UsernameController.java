@@ -33,6 +33,16 @@ public class UsernameController {
         stage.setScene(scene);
         stage.show();
     }
+
+    public void switchToWelcomeScene (javafx.event.ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/SecondScreen.fxml"));
+        scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/fxml/SecondScreen.css").toExternalForm());
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
     public void exit(ActionEvent actionEvent) throws IOException {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
