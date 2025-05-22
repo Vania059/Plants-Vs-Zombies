@@ -1,5 +1,7 @@
+/*
 package com.example.plantsvszombies.codeWallnut;
 
+import com.example.plantsvszombies.Wallnut;
 import javafx.scene.layout.Pane;
 
 public class GamePane extends Pane {
@@ -13,3 +15,4 @@ public class GamePane extends Pane {
         wallnut.getImageView().setTranslateY(150);
     }
 }
+*/

@@ -5,78 +5,83 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Tile {
-    public static final int TILE_SIZE = 80;
-
-    private int col, row;
+    private static final int OFFSET_X = 50;
+    private static final int OFFSET_Y = 100;
+    private static final int TILE_SIZE = 80;
+    private int col;
+    private int row;
     private Plant plant;
     private Pane pane;
     private GameSceneController controller;
     private Rectangle tileRect;
-    private double layoutX, layoutY;
 
     public Tile(int col, int row, GameSceneController controller) {
         this.col = col;
         this.row = row;
         this.controller = controller;
-        this.plant = null;
         this.pane = null;
 
+        // Tạo ô gạch ở đúng vị trí layout
         tileRect = new Rectangle(TILE_SIZE, TILE_SIZE);
-        tileRect.setFill(Color.TRANSPARENT);
-        tileRect.setStroke(Color.TRANSPARENT); // Để test thì để LIGHTGRAY
+        tileRect.setFill(Color.rgb(200, 255, 200, 0.2)); // Màu nền nhạt
+        tileRect.setStroke(Color.LIGHTGRAY); // Viền nhẹ
+        tileRect.setStrokeWidth(1);
 
-        // Sự kiện click trồng Sunflower
+        // Đặt vị trí layout ở đây
+        tileRect.setLayoutX(getCenterX() - TILE_SIZE / 2);
+        tileRect.setLayoutY(getCenterY() - TILE_SIZE / 2);
+
         tileRect.setOnMouseClicked(event -> {
-            if (plant == null && pane != null) {
-                Sunflower sf = new Sunflower(this, pane, controller);
-                pane.getChildren().addAll(sf.getNodes());
-                this.plant = sf;
+            if (pane != null) {
+                System.out.println("Tile clicked at row " + row + ", col " + col);
+                controller.plantSelectedPlant(this);
+            } else {
+                System.out.println("Tile clicked but pane is null at row " + row + ", col " + col);
             }
         });
     }
 
-    // Khi set vị trí, cập nhật cả cho tileRect
-    public void setLayoutX(double x) {
-        this.layoutX = x;
-        tileRect.setX(x);
-    }
-
-    public void setLayoutY(double y) {
-        this.layoutY = y;
-        tileRect.setY(y);
-    }
-
     public double getCenterX() {
-        return layoutX + TILE_SIZE / 2.0;
+        return OFFSET_X + col * TILE_SIZE + TILE_SIZE / 2;
     }
 
     public double getCenterY() {
-        return layoutY + TILE_SIZE / 2.0;
-    }
-
-    public void setPane(Pane pane) {
-        this.pane = pane;
-        if (!pane.getChildren().contains(tileRect)) {
-            pane.getChildren().add(tileRect);
-        }
-    }
-
-    // Nếu muốn tile tự cộng điểm mặt trời (khi plant tạo sun token)
-    public void addSunPoints(int points) {
-        if (controller != null) {
-            controller.addSunPoints(points);
-        }
-    }
-
-    public void setPlant(Plant plant) {
-        this.plant = plant;
+        return OFFSET_Y + row * TILE_SIZE + TILE_SIZE / 2;
     }
 
     public Plant getPlant() {
         return plant;
     }
 
+    public void setPlant(Plant plant) {
+        this.plant = plant;
+    }
+
+    public Pane getPane() {
+        return pane;
+    }
+
+    public void setPane(Pane pane) {
+        this.pane = pane;
+        if (pane != null && !pane.getChildren().contains(tileRect)) {
+            pane.getChildren().add(tileRect);
+            tileRect.toFront(); // Ensure tile is clickable
+        }
+    }
+
     public Rectangle getTileRect() {
         return tileRect;
+    }
+
+    public static int getTileSize() {
+        return TILE_SIZE;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
     }
 }

@@ -1,5 +1,7 @@
+/*
 package com.example.plantsvszombies.codePeashooter;
 
+import com.example.plantsvszombies.Peashooter;
 import javafx.scene.layout.Pane;
 
 public class GamePane extends Pane {
@@ -12,4 +14,4 @@ public class GamePane extends Pane {
         peashooter.getImageView().setTranslateX(100);
         peashooter.getImageView().setTranslateY(150);
     }
-}
+}*/

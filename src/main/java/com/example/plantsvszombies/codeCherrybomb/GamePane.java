@@ -1,5 +1,6 @@
-package com.example.plantsvszombies.codeCherrybomb;
+/*package com.example.plantsvszombies.codeCherrybomb;
 
+import com.example.plantsvszombies.Cherrybomb;
 import javafx.scene.layout.Pane;
 
 public class GamePane extends Pane {
@@ -12,4 +13,4 @@ public class GamePane extends Pane {
         cherrybomb.getImageView().setTranslateX(250);
         cherrybomb.getImageView().setTranslateY(150);
     }
-}
+}*/

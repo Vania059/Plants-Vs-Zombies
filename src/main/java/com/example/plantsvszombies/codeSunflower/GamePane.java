@@ -1,5 +1,7 @@
+/*
 package com.example.plantsvszombies.codeSunflower;
 
+import com.example.plantsvszombies.Sunflower;
 import javafx.scene.layout.Pane;
 
 public class GamePane extends Pane {
@@ -13,3 +15,4 @@ public class GamePane extends Pane {
         sunflower.getImageView().setTranslateY(150);
     }
 }
+*/

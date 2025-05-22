@@ -1,3 +1,4 @@
+/*
 package com.example.plantsvszombies.codeCherrybomb;
 
 import javafx.application.Application;
@@ -19,3 +20,4 @@ public class CherrybombApp extends Application {
         launch();
     }
 }
+*/
