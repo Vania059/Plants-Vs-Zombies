@@ -7,11 +7,12 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-
+import java.nio.file.Paths;
 
 public abstract class Zombie {
     protected Image walkImage;
     protected Image eatImage;
+    protected Image jumpImage;
     protected ImageView imageView;
     protected int HP;
     protected double speed;
@@ -23,13 +24,16 @@ public abstract class Zombie {
     protected Image deadImage;
 
 
-    public Zombie(String walkGifPath, String eatGifPath, String deadGifPath, String soundPath, String eatingSoundPath, int HP, double speed, int x, int y, boolean isWalking) {
-        this.walkImage = new Image(getClass().getResource(walkGifPath).toExternalForm());;
-        this.eatImage = new Image(getClass().getResource(eatGifPath).toExternalForm());;
+    public Zombie(String jumpGifPath, String walkGifPath, String eatGifPath, String deadGifPath, String soundPath, String eatingSoundPath, int HP, double speed, int x, int y, boolean isWalking) {
+        this.walkImage = new Image(getClass().getResource(walkGifPath).toExternalForm());
+        this.eatImage = new Image(getClass().getResource(eatGifPath).toExternalForm());
+        this.deadImage = new Image(getClass().getResource(deadGifPath).toExternalForm());
+        if (jumpGifPath != null) {
+            this.jumpImage = new Image(getClass().getResource(jumpGifPath).toExternalForm());
+        }
         this.imageView = new ImageView(walkImage);
-        this.deadImage = new Image(getClass().getResource(deadGifPath).toExternalForm());;
-        this.imageView.setFitWidth(200);
-        this.imageView.setFitHeight(200);
+        this.imageView.setFitWidth(150);
+        this.imageView.setFitHeight(150);
         this.imageView.setPreserveRatio(true);
         this.imageView.setX(x);
         this.imageView.setY(y);
@@ -37,20 +41,24 @@ public abstract class Zombie {
         this.speed = speed;
         this.isWalking = isWalking;
         Sound = createMediaPlayer(soundPath);
-        Sound.setCycleCount(MediaPlayer.INDEFINITE);
-        Sound.play();
+        if (Sound != null) {
+            Sound.setCycleCount(MediaPlayer.INDEFINITE);
+            Sound.play();
+        }
         eatingSound = createMediaPlayer(eatingSoundPath);
-        eatingSound.setCycleCount(MediaPlayer.INDEFINITE);
+        if (eatingSound != null) eatingSound.setCycleCount(MediaPlayer.INDEFINITE);
     }
 
     public ImageView getView() {
         return imageView;
     }
     public void moveToPlant(double plantX) {
+        if (movement != null) movement.stop(); // Dừng nếu đang di chuyển
+
         movement = new Timeline(new KeyFrame(Duration.millis(50), e -> {
             if (isWalking && imageView.getX() > plantX + 5) {
-                imageView.setX(imageView.getX() - speed); // move left
-            } else {
+                imageView.setX(imageView.getX() - speed); // đi sang trái
+            } else if (isWalking) {
                 startEating();
                 movement.stop();
             }

@@ -20,7 +20,7 @@ public class GameSceneController implements Initializable {
     @FXML private Label sunLabel;
 
     private List<Normal_zombie> zombies = new ArrayList<>();
-    private Tile[][] grid = new Tile[5][9];
+    private Tile[][] grid = new Tile[5][8];
     private int sunPoints = 0;
 
     private List<PlantCard> plantCards;
@@ -37,8 +37,8 @@ public class GameSceneController implements Initializable {
 
         PlantCard peashooterCard = new PlantCard(250, "peashooter", 100, gamePane , this);
         PlantCard sunflowerCard = new PlantCard(330, "sunflower", 50, gamePane, this);
-        PlantCard wallnutCard = new PlantCard(410, "walnut", 150, gamePane, this);
-        PlantCard cherrybombCard = new PlantCard(490, "cherrybomb", 175, gamePane, this);
+        PlantCard wallnutCard = new PlantCard(410, "walnut", 50, gamePane, this);
+        PlantCard cherrybombCard = new PlantCard(490, "cherrybomb", 150, gamePane, this);
 
         plantCards.add(peashooterCard);
         plantCards.add(sunflowerCard);
@@ -51,7 +51,7 @@ public class GameSceneController implements Initializable {
 
     private void setupGrid() {
         for (int row = 0; row < 5; row++) {
-            for (int col = 0; col < 9; col++) {
+            for (int col = 0; col < 8; col++) {
                 // Truyền đúng controller (this) vào Tile
                 Tile tile = new Tile(col, row, this);
                 tile.setPane(gamePane);
@@ -107,7 +107,7 @@ public class GameSceneController implements Initializable {
     private void startSkySun() {
         Random random = new Random();
         Timeline skySun = new Timeline(new KeyFrame(Duration.seconds(7), e -> {
-            int col = random.nextInt(9);
+            int col = random.nextInt(8);
             int row = random.nextInt(5);
             Tile tile = grid[row][col];
             new SunToken(tile.getCenterX(), tile.getCenterY() - 530, gamePane, this, false);
@@ -119,6 +119,7 @@ public class GameSceneController implements Initializable {
     public void addSunPoints(int points) {
         sunPoints += points;
         sunLabel.setText("" + sunPoints);
+        updatePlantCards();
     }
 
     public int getSunPoints() {
@@ -157,31 +158,27 @@ public class GameSceneController implements Initializable {
         System.out.println("Attempting to plant on tile at row " + tile.getRow() + ", col " + tile.getCol());
         System.out.println("Current sun points: " + sunPoints);
         System.out.println("Selected card: " + (selectedCard != null ? selectedCard.getPlantType() : "none"));
-        if (selectedCard != null) {
-            System.out.println("Selected card cost: " + selectedCard.getCost());
-        }
-        System.out.println("Tile has plant: " + (tile.getPlant() != null));
-
-        if (selectedCard == null || tile.getPlant() != null || sunPoints < selectedCard.getCost()) {
-            System.out.println("Cannot plant: " + (selectedCard == null ? "No card selected" : sunPoints < selectedCard.getCost() ? "Not enough sun points (need " + selectedCard.getCost() + ")" : "Tile occupied"));
-            return;
-        }
+        int cost = selectedCard.getCost();
+        String type = selectedCard.getPlantType().toLowerCase();
         Plant plant = null;
-        if (selectedCard.getPlantType().equals("Sunflower")) {
-            plant = new Sunflower(tile, gamePane, this);
-        } else if (selectedCard.getPlantType().equals("Wallnut")) {
-            plant = new Wallnut(tile, gamePane);
-        } else if (selectedCard.getPlantType().equals("Peashooter")) {
-            plant = new Peashooter(tile, gamePane);
-        } else if (selectedCard.getPlantType().equals("CherryBomb")) {
-            plant = new Cherrybomb(tile, gamePane);
+        switch (type) {
+            case "sunflower":
+                plant = new Sunflower(tile, gamePane, this);
+                break;
+            case "peashooter":
+                plant = new Peashooter(tile, gamePane);
+                break;
+            case "cherrybomb":
+                plant = new Cherrybomb(tile, gamePane);
+                break;
+            case "walnut":
+                plant = new Wallnut(tile, gamePane);
+                break;
         }
         if (plant != null) {
+            tile.setPlant(plant);
             gamePane.getChildren().addAll(plant.getNodes());
-            deductSunPoints(selectedCard.getCost());
-            System.out.println("Planted " + selectedCard.getPlantType() + " at row " + tile.getRow() + ", col " + tile.getCol());
-        } else {
-            System.out.println("Failed to create plant for type: " + selectedCard.getPlantType());
+            deductSunPoints(cost); // 🔴 Trừ điểm tại đây
         }
     }
 

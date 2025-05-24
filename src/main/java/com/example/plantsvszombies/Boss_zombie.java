@@ -11,11 +11,12 @@ public class Boss_zombie extends Zombie {
     int y;
     public Boss_zombie(int x, int y) {
         super (
-                "/Zombies/normal_zombie_walk.gif",
-                "/Zombies/boss_zombie_hit.gif",
-                "/Zombies/boss_zombie_die.gif",
-                "/Audio/boss_zombie_voice.mp3",
-                "/Audio/boss_zombie_hit.mp3",
+                null,
+                "/Gif/boss_zombie_walk.gif",
+                "/Gif/boss_zombie_hit.gif",
+                "/Gif/boss_zombie_die.gif",
+                "/Sound/boss_zombie_voice.mp3",
+                "/Sound/boss_zombie_hit.mp3",
                 300,
                 0.75,
                 x,

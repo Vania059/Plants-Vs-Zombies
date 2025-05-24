@@ -5,8 +5,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Tile {
-    private static final int OFFSET_X = 50;
-    private static final int OFFSET_Y = 100;
+    private static final int OFFSET_X = 210;
+    private static final int OFFSET_Y = 80;
     private static final int TILE_SIZE = 80;
     private int col;
     private int row;

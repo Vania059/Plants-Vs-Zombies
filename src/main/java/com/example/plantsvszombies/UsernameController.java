@@ -22,7 +22,7 @@ public class UsernameController {
     Label welcomeLabel;
 
     public void display (String username) throws IOException {
-        welcomeLabel.setText("Welcome " + username + "!");
+        welcomeLabel.setText(username);
     }
 
     public void switchToGameScene (javafx.event.ActionEvent event) throws IOException {
