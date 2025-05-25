@@ -5,9 +5,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Tile {
-    private static final int OFFSET_X = 210;
-    private static final int OFFSET_Y = 80;
-    private static final int TILE_SIZE = 80;
+    private static final int OFFSET_X = 95;
+    private static final int OFFSET_Y = 55;
+    private static final int TILE_WIDTH = 85;
+    private static final int TILE_HEIGHT = 95;
     private int col;
     private int row;
     private Plant plant;
@@ -22,31 +23,36 @@ public class Tile {
         this.pane = null;
 
         // Tạo ô gạch ở đúng vị trí layout
-        tileRect = new Rectangle(TILE_SIZE, TILE_SIZE);
-        tileRect.setFill(Color.rgb(200, 255, 200, 0.2)); // Màu nền nhạt
-        tileRect.setStroke(Color.LIGHTGRAY); // Viền nhẹ
-        tileRect.setStrokeWidth(1);
+        tileRect = new Rectangle(TILE_WIDTH, TILE_HEIGHT);
+        tileRect.setFill(Color.TRANSPARENT); // Không màu nền
+        tileRect.setStroke(null); // Không viền
+        tileRect.setOpacity(1);
+
+        tileRect.setOnMouseEntered(event -> {
+            tileRect.setFill(Color.rgb(150, 255, 150, 0.3)); // Sáng hơn khi hover
+        });
+
+        tileRect.setOnMouseExited(event -> {
+            tileRect.setFill(Color.TRANSPARENT); // Trở lại bình thường
+        });
 
         // Đặt vị trí layout ở đây
-        tileRect.setLayoutX(getCenterX() - TILE_SIZE / 2);
-        tileRect.setLayoutY(getCenterY() - TILE_SIZE / 2);
+        tileRect.setLayoutX(getCenterX() - tileRect.getWidth() / 2);
+        tileRect.setLayoutY(getCenterY() - tileRect.getHeight() / 2);
 
-        tileRect.setOnMouseClicked(event -> {
-            if (pane != null) {
-                System.out.println("Tile clicked at row " + row + ", col " + col);
+        tileRect.setOnMouseClicked(e -> {
+            if (controller.getSelectedCard() != null && !hasPlant()) {
                 controller.plantSelectedPlant(this);
-            } else {
-                System.out.println("Tile clicked but pane is null at row " + row + ", col " + col);
             }
         });
     }
 
     public double getCenterX() {
-        return OFFSET_X + col * TILE_SIZE + TILE_SIZE / 2;
+        return OFFSET_X + col * TILE_WIDTH + TILE_WIDTH / 2;
     }
 
     public double getCenterY() {
-        return OFFSET_Y + row * TILE_SIZE + TILE_SIZE / 2;
+        return OFFSET_Y + row * TILE_HEIGHT + TILE_HEIGHT / 2;
     }
 
     public Plant getPlant() {
@@ -55,6 +61,18 @@ public class Tile {
 
     public void setPlant(Plant plant) {
         this.plant = plant;
+    }
+
+    public Rectangle getTileNode() {
+        return tileRect;
+    }
+
+    public boolean hasPlant() {
+        return plant != null;
+    }
+
+    public void clearPlant() {
+        this.plant = null;
     }
 
     public Pane getPane() {
@@ -67,14 +85,6 @@ public class Tile {
             pane.getChildren().add(tileRect);
             tileRect.toFront(); // Ensure tile is clickable
         }
-    }
-
-    public Rectangle getTileRect() {
-        return tileRect;
-    }
-
-    public static int getTileSize() {
-        return TILE_SIZE;
     }
 
     public int getRow() {

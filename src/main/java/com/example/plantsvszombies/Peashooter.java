@@ -6,12 +6,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import javafx.scene.Node;
 
 public class Peashooter extends Plant{
     private final ImageView imageView;
 
     public Peashooter(Tile tile, Pane pane) {
-        super(tile, pane, null);
+        super(tile, pane);
         // Bước 1: Hiển thị ảnh thường
         Image idleImage = new Image(getClass().getResource("/Plants/peashooter.gif").toExternalForm());
         imageView = new ImageView(idleImage);
@@ -27,22 +28,32 @@ public class Peashooter extends Plant{
         Timeline shootAnimation = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
             Image shootImage = new Image(getClass().getResource("/Plants/peashootershoot.gif").toExternalForm());
             imageView.setImage(shootImage);
-            System.out.println("Peashooter starts shooting!");
-        }));
+            // Tạo đạn tại thời điểm đổi ảnh
+            double bulletX = imageView.getLayoutX() + imageView.getFitWidth() - 10;
+            double bulletY = imageView.getLayoutY() + imageView.getFitHeight() / 2 - 10;
+            new Bullet(bulletX, bulletY, pane);
 
+            System.out.println("Peashooter starts shooting!");
+            // Sau đó bắt đầu bắn tự động về sau
+            startBehavior();
+        }));
         shootAnimation.setCycleCount(1);
         shootAnimation.play();
     }
 
-    public ImageView getImageView() {
+    @Override
+    public Node getNode() {
         return imageView;
     }
 
     @Override
     public void startBehavior() {
-        Timeline bulletFiring = new Timeline(new KeyFrame(Duration.seconds(3), e -> {
-            new Bullet(head.getCenterX() + 40, head.getCenterY(), pane);
-            System.out.println("Peashooter shoots!");
+        Timeline bulletFiring = new Timeline(new KeyFrame(Duration.seconds(1.2), e -> {
+            // Tạo viên đạn xuất hiện ở ngay "miệng súng" peashooter
+            double bulletX = imageView.getLayoutX() + imageView.getFitWidth(); // cuối thân peashooter
+            double bulletY = imageView.getLayoutY() + imageView.getFitHeight() / 2; // giữa chiều cao cây
+
+            new Bullet(bulletX, bulletY, pane);
         }));
         bulletFiring.setCycleCount(Timeline.INDEFINITE);
         bulletFiring.play();

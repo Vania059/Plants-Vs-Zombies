@@ -26,15 +26,6 @@ public class SceneController {
     @FXML
     TextField usernameTextField;
 
-    public void welcome(javafx.event.ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Welcome.fxml"));
-        scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/fxml/Welcome.css").toExternalForm());
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
-
     public void switchToSecondScreen(javafx.event.ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/SecondScreen.fxml"));
         scene = new Scene(root);

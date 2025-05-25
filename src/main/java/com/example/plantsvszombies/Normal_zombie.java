@@ -13,11 +13,11 @@ public class Normal_zombie extends Zombie {
     public Normal_zombie(int x, int y) {
         super(
                 null,
-                "/Gif/normal_zombie_walk.gif",
-                "/Gif/normal_zombie_eat.gif",
-                "/Gif/normal_zombie_die.gif",
-                "/Sound/normal_zombie_voice.mp3",
-                "/Sound/normal_zombie_eat.mp3",
+                "/Zombies/normal_zombie_walk.gif",
+                "/Zombies/normal_zombie_eat.gif",
+                "/Zombies/normal_zombie_die.gif",
+                "/Audio/normal_zombie_voice.mp3",
+                "/Audio/normal_zombie_eat.mp3",
                 100,
                 0.5,
                 x,

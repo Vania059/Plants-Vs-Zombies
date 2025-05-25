@@ -13,12 +13,12 @@ public class Jump_zombie extends Zombie {
 
     public Jump_zombie(int x, int y) {
         super(
-                "/Gif/jump_zombie_jump.gif",
-                "/Gif/jump_zombie_walk.gif",
-                "/Gif/jump_zombie_eat.gif",
-                "/Gif/jump_zombie_die.gif",
-                "/Sound/jump_zombie_voice.mp3",
-                "/Sound/normal_zombie_eat.mp3",
+                "/Zombies/jump_zombie_jump.gif",
+                "/Zombies/jump_zombie_walk.gif",
+                "/Zombies/jump_zombie_eat.gif",
+                "/Zombies/jump_zombie_die.gif",
+                "/Audio/jump_zombie_voice.mp3",
+                "/Audio/normal_zombie_eat.mp3",
                 200,
                 0.5,
                 x,

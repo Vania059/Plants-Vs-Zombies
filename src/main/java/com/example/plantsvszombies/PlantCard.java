@@ -85,6 +85,7 @@ public class PlantCard {
             plantImage.toFront(); // Ensure card is clickable
             System.out.println("Added PlantCard for " + plantType + " at x=" + x + ", y=10, children count: " + pane.getChildren().size());
             plantImage.setOnMouseClicked(this::handleClick);
+            plantImage.setCursor(javafx.scene.Cursor.HAND);
         }
 
         updateState(controller.getSunPoints());

@@ -3,6 +3,7 @@ package com.example.plantsvszombies;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -18,9 +19,10 @@ public class GameSceneController implements Initializable {
 
     @FXML private AnchorPane gamePane;
     @FXML private Label sunLabel;
+    @FXML private AnchorPane levelPane;
 
     private List<Normal_zombie> zombies = new ArrayList<>();
-    private Tile[][] grid = new Tile[5][8];
+    private Tile[][] grid = new Tile[5][9];
     private int sunPoints = 0;
 
     private List<PlantCard> plantCards;
@@ -47,15 +49,47 @@ public class GameSceneController implements Initializable {
 
         // Sau đó cập nhật trạng thái theo điểm mặt trời
         updatePlantCards();
+
+        // Đặt vị trí ban đầu: ở ngoài cùng dưới màn hình
+        levelPane.setTranslateY(540); // Giả sử scene cao khoảng 540px
+
+        // Bước 1: Pane chạy từ dưới lên giữa (300)
+        TranslateTransition up = new TranslateTransition(Duration.seconds(1), levelPane);
+        up.setToY(0); // Đi lên giữa màn hình
+
+        // Bước 2: Dừng lại 2 giây ở giữa
+        PauseTransition pause = new PauseTransition(Duration.seconds(2));
+
+        // Bước 3: Chạy từ giữa xuống lại dưới
+        TranslateTransition down = new TranslateTransition(Duration.seconds(1), levelPane);
+        down.setToY(540); // Quay về vị trí dưới
+
+        // Khi kết thúc chạy xuống thì ẩn pane
+        down.setOnFinished(event -> levelPane.setVisible(false));
+
+        // Kết hợp chuỗi
+        up.setOnFinished(e -> pause.play());
+        pause.setOnFinished(e -> down.play());
+
+        // Bắt đầu chuỗi
+        up.play();
+        levelPane.toFront();
+        levelPane.setVisible(true);
     }
 
     private void setupGrid() {
         for (int row = 0; row < 5; row++) {
-            for (int col = 0; col < 8; col++) {
+            for (int col = 0; col < 9; col++) {
                 // Truyền đúng controller (this) vào Tile
                 Tile tile = new Tile(col, row, this);
                 tile.setPane(gamePane);
                 grid[row][col] = tile;
+
+                tile.getTileNode().setOnMouseClicked(e -> {
+                    if (selectedCard != null && !tile.hasPlant()) {
+                        plantSelectedPlant(tile);
+                    }
+                });
             }
         }
     }
@@ -74,7 +108,7 @@ public class GameSceneController implements Initializable {
                 zombies.add(zombie);
                 gamePane.getChildren().add(zombie.getView());
                 zombie.startWalking();
-                zombie.moveToPlant(150);
+                zombie.moveToPlant(grid);
             }
         }));
         spawnTimeline.setCycleCount(10); // hoặc Timeline.INDEFINITE nếu muốn lặp mãi
@@ -93,7 +127,7 @@ public class GameSceneController implements Initializable {
                 zombies.add(zombie);
                 gamePane.getChildren().add(zombie.getView());
                 zombie.startWalking();
-                zombie.moveToPlant(150);
+                zombie.moveToPlant(grid);
             }
 
             // Bắt đầu Timeline sau lần spawn đầu tiên
@@ -136,9 +170,6 @@ public class GameSceneController implements Initializable {
         // Thêm 1 Peashooter và 1 Sunflower để test
         Peashooter peashooter = new Peashooter(grid[2][2], gamePane);
         Sunflower sunflower = new Sunflower(grid[1][1], gamePane, this);
-
-        gamePane.getChildren().addAll(peashooter.getNodes());
-        gamePane.getChildren().addAll(sunflower.getNodes());
     }
 
     public void selectPlant(String plantType) {
@@ -177,7 +208,7 @@ public class GameSceneController implements Initializable {
         }
         if (plant != null) {
             tile.setPlant(plant);
-            gamePane.getChildren().addAll(plant.getNodes());
+            gamePane.getChildren().addAll(plant.getNode());
             deductSunPoints(cost); // 🔴 Trừ điểm tại đây
         }
     }
@@ -186,5 +217,9 @@ public class GameSceneController implements Initializable {
         for (PlantCard card : plantCards) {
             card.updateState(sunPoints);
         }
+    }
+
+    public PlantCard getSelectedCard() {
+        return selectedCard;
     }
 }

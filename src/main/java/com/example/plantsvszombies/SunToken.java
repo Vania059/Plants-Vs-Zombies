@@ -23,10 +23,10 @@ public class SunToken {
                 getClass().getResourceAsStream("/Plants/sun.png")
         );
         sunView = new ImageView(sunImage);
-        sunView.setFitWidth(60);
-        sunView.setFitHeight(60);
-        sunView.setX(x - 15);
-        sunView.setY(y - 15);
+        sunView.setFitWidth(50);
+        sunView.setFitHeight(50);
+        sunView.setX(x - 30);
+        sunView.setY(y - 30);
 
         pane.getChildren().add(sunView);
 

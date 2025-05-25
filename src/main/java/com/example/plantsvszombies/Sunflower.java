@@ -2,6 +2,7 @@ package com.example.plantsvszombies;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -12,7 +13,7 @@ public class Sunflower extends Plant{
     private GameSceneController controller;
 
     public Sunflower(Tile tile, Pane pane, GameSceneController controller) {
-        super(tile, pane, null);
+        super(tile, pane);
         this.controller = controller;
         Image gif = new Image(getClass().getResource("/Plants/sunflower.gif").toExternalForm());
         imageView = new ImageView(gif);
@@ -20,23 +21,21 @@ public class Sunflower extends Plant{
         imageView.setPreserveRatio(true);
         // 3 dòng dưới Ngọc thêm
         imageView.setLayoutX(tile.getCenterX() - 50);
-        imageView.setLayoutY(tile.getCenterY() - 50);
+        imageView.setLayoutY(tile.getCenterY() - 35);
 
         pane.getChildren().add(imageView);
+        startBehavior();
     }
 
-    public ImageView getImageView() {
+    @Override
+    public Node getNode() {
         return imageView;
-    }
-
-    public void produceSun() {
-        System.out.println("Sunflower produces sun!");
     }
 
     @Override
     public void startBehavior() {
         Timeline sunProduction = new Timeline(new KeyFrame(Duration.seconds(10), e -> {
-            new SunToken(head.getCenterX(), head.getCenterY(), pane, controller, true);
+            new SunToken(imageView.getLayoutX() + 40, imageView.getLayoutY(), pane, controller, true);
         }));
         sunProduction.setCycleCount(Timeline.INDEFINITE);
         sunProduction.play();

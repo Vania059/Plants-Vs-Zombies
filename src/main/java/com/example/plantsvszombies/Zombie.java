@@ -2,12 +2,13 @@ package com.example.plantsvszombies;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import java.nio.file.Paths;
+
 
 public abstract class Zombie {
     protected Image walkImage;
@@ -25,15 +26,12 @@ public abstract class Zombie {
 
 
     public Zombie(String jumpGifPath, String walkGifPath, String eatGifPath, String deadGifPath, String soundPath, String eatingSoundPath, int HP, double speed, int x, int y, boolean isWalking) {
-        this.walkImage = new Image(getClass().getResource(walkGifPath).toExternalForm());
-        this.eatImage = new Image(getClass().getResource(eatGifPath).toExternalForm());
-        this.deadImage = new Image(getClass().getResource(deadGifPath).toExternalForm());
-        if (jumpGifPath != null) {
-            this.jumpImage = new Image(getClass().getResource(jumpGifPath).toExternalForm());
-        }
+        this.walkImage = new Image(getClass().getResource(walkGifPath).toExternalForm());;
+        this.eatImage = new Image(getClass().getResource(eatGifPath).toExternalForm());;
         this.imageView = new ImageView(walkImage);
-        this.imageView.setFitWidth(150);
-        this.imageView.setFitHeight(150);
+        this.deadImage = new Image(getClass().getResource(deadGifPath).toExternalForm());;
+        this.imageView.setFitWidth(200);
+        this.imageView.setFitHeight(200);
         this.imageView.setPreserveRatio(true);
         this.imageView.setX(x);
         this.imageView.setY(y);
@@ -41,27 +39,46 @@ public abstract class Zombie {
         this.speed = speed;
         this.isWalking = isWalking;
         Sound = createMediaPlayer(soundPath);
-        if (Sound != null) {
-            Sound.setCycleCount(MediaPlayer.INDEFINITE);
-            Sound.play();
-        }
+        Sound.setCycleCount(MediaPlayer.INDEFINITE);
+        Sound.play();
         eatingSound = createMediaPlayer(eatingSoundPath);
-        if (eatingSound != null) eatingSound.setCycleCount(MediaPlayer.INDEFINITE);
+        eatingSound.setCycleCount(MediaPlayer.INDEFINITE);
     }
 
     public ImageView getView() {
         return imageView;
     }
-    public void moveToPlant(double plantX) {
-        if (movement != null) movement.stop(); // Dừng nếu đang di chuyển
-
+    public void moveToPlant(Tile[][] grid) {
         movement = new Timeline(new KeyFrame(Duration.millis(50), e -> {
-            if (isWalking && imageView.getX() > plantX + 5) {
-                imageView.setX(imageView.getX() - speed); // đi sang trái
-            } else if (isWalking) {
-                startEating();
-                movement.stop();
+            boolean foundPlant = false;
+
+            double zombieCenterY = imageView.getY() + imageView.getBoundsInParent().getHeight() / 2;
+            int row = (int)((zombieCenterY - 55) / 95); // OFFSET_Y = 55, TILE_HEIGHT = 95
+
+            if (row >= 0 && row < grid.length) {
+                for (Tile tile : grid[row]) {
+                    Plant plant = tile.getPlant();
+                    if (plant != null && plant.getNode() != null) {
+                        // Lấy khoảng cách giữa zombie và plant
+                        Bounds zombieBounds = imageView.getBoundsInParent();
+                        Bounds plantBounds = plant.getNode().getBoundsInParent();
+
+                        // Kiểm tra va chạm
+                        if (zombieBounds.intersects(plantBounds)) {
+                            foundPlant = true;
+                            break;
+                        }
+                    }
+                }
             }
+
+            if (isWalking && !foundPlant) {
+                imageView.setX(imageView.getX() - speed); // Di chuyển bình thường
+            } else if (foundPlant) {
+                startEating();
+                movement.stop(); // Dừng di chuyển để ăn
+            }
+
         }));
         movement.setCycleCount(Timeline.INDEFINITE);
         movement.play();
