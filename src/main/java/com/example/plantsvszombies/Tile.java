@@ -42,7 +42,7 @@ public class Tile {
 
         tileRect.setOnMouseClicked(e -> {
             if (controller.getSelectedCard() != null && !hasPlant()) {
-                controller.plantSelectedPlant(this);
+                controller.plantSelectedPlant(this, getPane());
             }
         });
     }

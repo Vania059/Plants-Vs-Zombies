@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
@@ -21,7 +22,7 @@ public class GameSceneController implements Initializable {
     @FXML private Label sunLabel;
     @FXML private AnchorPane levelPane;
 
-    private List<Normal_zombie> zombies = new ArrayList<>();
+    private List<Zombie> zombies = new ArrayList<>();
     private Tile[][] grid = new Tile[5][9];
     private int sunPoints = 0;
 
@@ -31,7 +32,6 @@ public class GameSceneController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupGrid();
-        spawnPlants();
         spawnZombies();
         startSkySun();
 
@@ -87,11 +87,15 @@ public class GameSceneController implements Initializable {
 
                 tile.getTileNode().setOnMouseClicked(e -> {
                     if (selectedCard != null && !tile.hasPlant()) {
-                        plantSelectedPlant(tile);
+                        plantSelectedPlant(tile, gamePane);
                     }
                 });
             }
         }
+    }
+
+    public Tile[][] getGrid() {
+        return grid;
     }
 
     private void spawnZombies() {
@@ -105,7 +109,7 @@ public class GameSceneController implements Initializable {
                 int randomLaneIndex = rand.nextInt(lanesY.length);
                 int y = lanesY[randomLaneIndex];
                 Normal_zombie zombie = new Normal_zombie(x, y);
-                zombies.add(zombie);
+                zombies.add(zombie); // OK vì Normal_zombie kế thừa Zombie
                 gamePane.getChildren().add(zombie.getView());
                 zombie.startWalking();
                 zombie.moveToPlant(grid);
@@ -138,6 +142,10 @@ public class GameSceneController implements Initializable {
         delay.play();
     }
 
+    public List<Zombie> getZombies() {
+        return new ArrayList<>(zombies); // hoặc return zombies nếu đã đúng kiểu
+    }
+
     private void startSkySun() {
         Random random = new Random();
         Timeline skySun = new Timeline(new KeyFrame(Duration.seconds(7), e -> {
@@ -166,12 +174,6 @@ public class GameSceneController implements Initializable {
         updatePlantCards();
     }
 
-    private void spawnPlants() {
-        // Thêm 1 Peashooter và 1 Sunflower để test
-        Peashooter peashooter = new Peashooter(grid[2][2], gamePane);
-        Sunflower sunflower = new Sunflower(grid[1][1], gamePane, this);
-    }
-
     public void selectPlant(String plantType) {
         for (PlantCard card : plantCards) {
             card.setSelected(card.getPlantType().equals(plantType));
@@ -185,7 +187,12 @@ public class GameSceneController implements Initializable {
         }
     }
 
-    public void plantSelectedPlant(Tile tile) {
+    public void plantSelectedPlant(Tile tile, Pane pane) {
+        if (tile.hasPlant()) {
+            System.out.println("Tile at row " + tile.getRow() + ", col " + tile.getCol() + " already has a plant!");
+            // (Có thể hiện thông báo lên UI cho người chơi ở đây)
+            return;
+        }
         System.out.println("Attempting to plant on tile at row " + tile.getRow() + ", col " + tile.getCol());
         System.out.println("Current sun points: " + sunPoints);
         System.out.println("Selected card: " + (selectedCard != null ? selectedCard.getPlantType() : "none"));
@@ -197,10 +204,10 @@ public class GameSceneController implements Initializable {
                 plant = new Sunflower(tile, gamePane, this);
                 break;
             case "peashooter":
-                plant = new Peashooter(tile, gamePane);
+                plant = new Peashooter(tile, gamePane, this);
                 break;
             case "cherrybomb":
-                plant = new Cherrybomb(tile, gamePane);
+                plant = new Cherrybomb(tile, gamePane, this);
                 break;
             case "walnut":
                 plant = new Wallnut(tile, gamePane);
@@ -210,6 +217,12 @@ public class GameSceneController implements Initializable {
             tile.setPlant(plant);
             gamePane.getChildren().addAll(plant.getNode());
             deductSunPoints(cost); // 🔴 Trừ điểm tại đây
+            // >>> Thêm dòng này: reset selectedCard sau khi trồng!
+            selectedCard = null;
+            // >>> Optionally: cập nhật trạng thái hiển thị (bỏ highlight)
+            for (PlantCard card : plantCards) {
+                card.setSelected(false);
+            }
         }
     }
 

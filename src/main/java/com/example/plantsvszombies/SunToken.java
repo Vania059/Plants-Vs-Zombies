@@ -32,7 +32,7 @@ public class SunToken {
 
         if (noDrop) {
             enableCollection();
-            scheduleDisappear(sunView, 3);
+            scheduleDisappear(sunView, 5);
         } else {
             dropFromSky();
         }
@@ -56,7 +56,7 @@ public class SunToken {
 
     private void dropFromSky() {
         Random random = new Random();
-        double maxDrop = 530 - sunView.getY();
+        double maxDrop = 520 - sunView.getY();
         double distance = 100 + random.nextDouble() * (maxDrop - 100);
 
         TranslateTransition drop = new TranslateTransition(
@@ -66,7 +66,7 @@ public class SunToken {
         drop.setOnFinished(e -> {
             if (!isCollected) {
                 enableCollection();
-                scheduleDisappear(sunView, 3);
+                scheduleDisappear(sunView, 5);
             }
         });
         drop.play();

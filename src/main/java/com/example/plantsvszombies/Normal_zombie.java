@@ -27,6 +27,12 @@ public class Normal_zombie extends Zombie {
         this.x = x;
         this.y = y;
     }
+
+    @Override
+    public String getZombieType() {
+        return "normalZombie";
+    }
+
     @Override
     public void startWalking() {
         isWalking = true;
@@ -44,7 +50,7 @@ public class Normal_zombie extends Zombie {
         if (Sound != null) Sound.stop();
         if (eatingSound != null) eatingSound.stop();
         if (movement != null) movement.stop();
-        Timeline removeAfterDeath = new Timeline(new KeyFrame(Duration.seconds(0.75), e -> {
+        Timeline removeAfterDeath = new Timeline(new KeyFrame(Duration.seconds(1.5), e -> {
             imageView.setVisible(false);
         }));
         removeAfterDeath.setCycleCount(1);

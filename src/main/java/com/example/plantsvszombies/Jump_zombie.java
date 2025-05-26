@@ -44,6 +44,12 @@ public class Jump_zombie extends Zombie {
         delay.setCycleCount(1);
         delay.play();
     }
+
+    @Override
+    public String getZombieType() {
+        return "jumpZombie";
+    }
+
     @Override
     public void startWalking() {
         if (!isJumping && HP > 0) {

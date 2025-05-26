@@ -26,6 +26,12 @@ public class Boss_zombie extends Zombie {
         this.x = x;
         this.y = y;
     }
+
+    @Override
+    public String getZombieType() {
+        return "bossZombie";
+    }
+
     @Override
     public void startWalking() {
         isWalking = true;

@@ -48,12 +48,17 @@ public abstract class Zombie {
     public ImageView getView() {
         return imageView;
     }
+
+    public abstract String getZombieType();
+
     public void moveToPlant(Tile[][] grid) {
         movement = new Timeline(new KeyFrame(Duration.millis(50), e -> {
             boolean foundPlant = false;
 
             double zombieCenterY = imageView.getLayoutY() + imageView.getBoundsInParent().getHeight() / 2;
             int row = (int)((zombieCenterY - 55) / 95); // OFFSET_Y = 55, TILE_HEIGHT = 95
+
+            Plant targetPlant = null;
 
             if (row >= 0 && row < grid.length) {
                 for (Tile tile : grid[row]) {
@@ -64,6 +69,7 @@ public abstract class Zombie {
 
                         if (Math.abs(zombieX - plantX) < 5) { // thử 30, có thể chỉnh 40 hoặc 25 tùy hình ảnh
                             foundPlant = true;
+                            targetPlant = plant;
                             break;
                         }
                     }
@@ -75,6 +81,31 @@ public abstract class Zombie {
             } else if (foundPlant) {
                 startEating();
                 movement.stop(); // Dừng di chuyển để ăn
+
+                // cần biến final để dùng trong lambda
+
+                final Plant finalTargetPlant = targetPlant;
+                Timeline biteTimer = new Timeline();
+                biteTimer.getKeyFrames().add(new KeyFrame(Duration.seconds(1.5), ev -> {
+                    if (finalTargetPlant instanceof Peashooter peashooter) {
+                        peashooter.beEatenBy(this);
+
+                        if (!peashooter.getNode().isVisible()) {
+                            ev.consume(); // Ngừng timeline biteTimer
+                            biteTimer.stop();
+                            isWalking = true;
+                            imageView.setImage(walkImage);
+                            if (eatingSound != null) eatingSound.stop(); // Tắt âm thanh ăn
+                            if (Sound != null) Sound.play(); // Phát lại âm thanh đi bộ
+                            moveToPlant(grid); // Tiếp tục di chuyển
+                        }
+                    }
+                    // TODO: thêm các loại plant khác nếu cần
+
+
+                }));
+                biteTimer.setCycleCount(Timeline.INDEFINITE);
+                biteTimer.play();
             }
 
         }));

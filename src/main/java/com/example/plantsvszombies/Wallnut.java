@@ -14,11 +14,8 @@ public class Wallnut extends Plant{
         imageView = new ImageView(gif);
         imageView.setFitWidth(80);
         imageView.setPreserveRatio(true);
-        // 3 dòng dưới Ngọc thêm
         imageView.setLayoutX(tile.getCenterX() - 50);
         imageView.setLayoutY(tile.getCenterY() - 50);
-
-        pane.getChildren().add(imageView);
     }
 
     @Override
