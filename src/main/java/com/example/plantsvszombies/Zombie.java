@@ -33,8 +33,8 @@ public abstract class Zombie {
         this.imageView.setFitWidth(200);
         this.imageView.setFitHeight(200);
         this.imageView.setPreserveRatio(true);
-        this.imageView.setX(x);
-        this.imageView.setY(y);
+        this.imageView.setLayoutX(x);
+        this.imageView.setLayoutY(y);
         this.HP = HP;
         this.speed = speed;
         this.isWalking = isWalking;
@@ -52,19 +52,17 @@ public abstract class Zombie {
         movement = new Timeline(new KeyFrame(Duration.millis(50), e -> {
             boolean foundPlant = false;
 
-            double zombieCenterY = imageView.getY() + imageView.getBoundsInParent().getHeight() / 2;
+            double zombieCenterY = imageView.getLayoutY() + imageView.getBoundsInParent().getHeight() / 2;
             int row = (int)((zombieCenterY - 55) / 95); // OFFSET_Y = 55, TILE_HEIGHT = 95
 
             if (row >= 0 && row < grid.length) {
                 for (Tile tile : grid[row]) {
                     Plant plant = tile.getPlant();
                     if (plant != null && plant.getNode() != null) {
-                        // Lấy khoảng cách giữa zombie và plant
-                        Bounds zombieBounds = imageView.getBoundsInParent();
-                        Bounds plantBounds = plant.getNode().getBoundsInParent();
+                        double zombieX = imageView.getLayoutX();
+                        double plantX = plant.getNode().getLayoutX();
 
-                        // Kiểm tra va chạm
-                        if (zombieBounds.intersects(plantBounds)) {
+                        if (Math.abs(zombieX - plantX) < 5) { // thử 30, có thể chỉnh 40 hoặc 25 tùy hình ảnh
                             foundPlant = true;
                             break;
                         }
@@ -73,7 +71,7 @@ public abstract class Zombie {
             }
 
             if (isWalking && !foundPlant) {
-                imageView.setX(imageView.getX() - speed); // Di chuyển bình thường
+                imageView.setLayoutX(imageView.getLayoutX() - speed); // Di chuyển bình thường
             } else if (foundPlant) {
                 startEating();
                 movement.stop(); // Dừng di chuyển để ăn

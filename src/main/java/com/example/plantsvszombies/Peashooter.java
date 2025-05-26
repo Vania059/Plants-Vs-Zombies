@@ -29,8 +29,8 @@ public class Peashooter extends Plant{
             Image shootImage = new Image(getClass().getResource("/Plants/peashootershoot.gif").toExternalForm());
             imageView.setImage(shootImage);
             // Tạo đạn tại thời điểm đổi ảnh
-            double bulletX = imageView.getLayoutX() + imageView.getFitWidth() - 10;
-            double bulletY = imageView.getLayoutY() + imageView.getFitHeight() / 2 - 10;
+            double bulletX = imageView.getLayoutX() + imageView.getFitWidth() - 100;
+            double bulletY = imageView.getLayoutY() + imageView.getFitHeight() / 2 - 100;
             new Bullet(bulletX, bulletY, pane);
 
             System.out.println("Peashooter starts shooting!");

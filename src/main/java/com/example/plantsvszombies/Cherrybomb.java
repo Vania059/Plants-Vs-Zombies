@@ -24,8 +24,8 @@ public class Cherrybomb extends Plant{
 
         pane.getChildren().add(imageView);
 
-        // Bước 2: Sau 1.2 giây, chuyển sang cherrybombpowie.gif
-        Timeline changeToExplosion = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
+        // Bước 2: Sau 30.2 giây, chuyển sang cherrybombpowie.gif
+        Timeline changeToExplosion = new Timeline(new KeyFrame(Duration.seconds(30), e -> {
             Image explodeImage = new Image(getClass().getResource("/Plants/cherrybombpowie.gif").toExternalForm());
             imageView.setImage(explodeImage);
             imageView.setFitWidth(240); // To vừa 3 tile
@@ -36,7 +36,7 @@ public class Cherrybomb extends Plant{
         }));
 
         // Bước 3: Sau 3.2 giây (tức 2 giây sau khi nổ), ẩn luôn hình
-        Timeline disappear = new Timeline(new KeyFrame(Duration.seconds(3.2), e -> {
+        Timeline disappear = new Timeline(new KeyFrame(Duration.seconds(32), e -> {
             imageView.setVisible(false);  // hoặc remove hẳn nếu muốn
             System.out.println("Cherrybomb has disappeared!");
         }));

@@ -21,14 +21,14 @@
       <Label fx:id="sunLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="191.0" layoutY="54.0" prefHeight="19.0" prefWidth="51.0" />
       <AnchorPane fx:id="levelPane" layoutX="281.0" layoutY="175.0" prefHeight="190.0" prefWidth="460.0">
          <children>
-            <ImageView fitHeight="190.0" fitWidth="460.0">
+            <ImageView fitHeight="414.0" fitWidth="568.0" layoutX="-98.0" layoutY="-167.0">
                <image>
-                  <Image url="@../Screen/LevelBG.jpg" />
+                  <Image url="@../Screen/LevelBG.png" />
                </image>
             </ImageView>
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="126.0" layoutY="58.0" prefHeight="74.0" prefWidth="208.0" text="Level 1" textAlignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="99.0" layoutY="102.0" prefHeight="74.0" prefWidth="208.0" text="Level 1" textAlignment="CENTER" textFill="#e2b032">
                <font>
-                  <Font name="System Bold" size="51.0" />
+                  <Font name="HouseofTerror" size="70.0" />
                </font>
             </Label>
          </children>
