@@ -10,6 +10,7 @@ public abstract class Plant {
     protected Pane pane; // để sinh đạn hoặc sun
     protected Tile tile;
 
+
     public Plant(Tile tile, Pane pane) {
         this.tile = tile;
         this.pane = pane;
@@ -20,11 +21,6 @@ public abstract class Plant {
     public abstract Node getNode();
 
     public abstract void startBehavior();
-    public void die() {
-        // Xóa cây khỏi Tile và UI
-        tile.clearPlant();
-        if (pane.getChildren().contains(this.getNode())) {
-            pane.getChildren().remove(this.getNode());
-        }
-    }
+
+    public abstract void stopBehavior();
 }

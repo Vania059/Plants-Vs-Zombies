@@ -55,6 +55,7 @@ public class Cherrybomb extends Plant{
                 if (p != null && p != this) {
                     grid[r][c].clearPlant();
                     p.getNode().setVisible(false);
+                    pane.getChildren().remove(p.getNode());
                 }
             }
         }
@@ -83,6 +84,6 @@ public class Cherrybomb extends Plant{
     public void startBehavior() {}
 
     @Override
-    public void die() {
-    }
+    public void stopBehavior() {}
+
 }

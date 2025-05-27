@@ -53,6 +53,7 @@ public class Sunflower extends Plant{
         sunProduction.play();
     }
 
+    @Override
     public void stopBehavior() {
         if (sunProduction != null) sunProduction.stop();
     }
@@ -74,6 +75,9 @@ public class Sunflower extends Plant{
 
         if (remainingHealth <= 0) {
             imageView.setVisible(false);
+            stopBehavior();
+            tile.setPlant(null);
+            pane.getChildren().remove(getNode());
             System.out.println("Sunflower has been eaten by " + zombieType + "!");
         }
     }

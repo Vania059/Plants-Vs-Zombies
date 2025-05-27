@@ -38,6 +38,9 @@ public class Wallnut extends Plant{
     @Override
     public void startBehavior() {}
 
+    @Override
+    public void stopBehavior() {}
+
     public void beEatenBy(Zombie zombie) {
         String zombieType = zombie.getZombieType();
 
@@ -55,6 +58,8 @@ public class Wallnut extends Plant{
 
         if (remainingHealth <= 0) {
             imageView.setVisible(false);
+            tile.setPlant(null);
+            pane.getChildren().remove(getNode());
             System.out.println("Wallnut has been eaten by " + zombieType + "!");
         }
     }

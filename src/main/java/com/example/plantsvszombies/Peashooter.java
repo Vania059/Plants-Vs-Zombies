@@ -78,6 +78,7 @@ public class Peashooter extends Plant{
         bulletFiring.play();
     }
 
+    @Override
     public void stopBehavior() {
         if (bulletFiring != null) bulletFiring.stop();
     }
@@ -103,7 +104,9 @@ public class Peashooter extends Plant{
 
         if (remainingHealth <= 0) {
             imageView.setVisible(false);
+            stopBehavior();
             tile.setPlant(null);
+            pane.getChildren().remove(getNode());
             System.out.println(this.getClass().getSimpleName() + " has been eaten by " + zombieType + "!");
         }
     }

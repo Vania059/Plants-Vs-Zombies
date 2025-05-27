@@ -251,6 +251,7 @@ public class GameSceneController implements Initializable {
     }
 
     public void showWinScreen() {
+        if (winPane.isVisible()) return; // Đã hiện thì thôi
         winPane.setVisible(true);
         winPane.toFront();
         winPane.setOpacity(1);
@@ -262,11 +263,12 @@ public class GameSceneController implements Initializable {
         scale.setFromY(0.1);
         scale.setToX(1.0);
         scale.setToY(1.0);
-        scale.setCycleCount(0);
+        scale.setCycleCount(1);
         scale.play();
     }
 
     public void showLoseScreen() {
+        if (losePane.isVisible()) return; // Đã hiện thì thôi
         losePane.setVisible(true);
         losePane.toFront();
         losePane.setOpacity(1);
@@ -279,7 +281,7 @@ public class GameSceneController implements Initializable {
         scale.setFromY(0.1);
         scale.setToX(1.0);
         scale.setToY(1.0);
-        scale.setCycleCount(0);
+        scale.setCycleCount(1);
         scale.play();
     }
 
@@ -299,12 +301,7 @@ public class GameSceneController implements Initializable {
                 Tile tile = grid[row][col];
                 if (tile.hasPlant()) {
                     Plant plant = tile.getPlant();
-                    if (plant instanceof Sunflower) {
-                        ((Sunflower) plant).stopBehavior();
-                    }
-                    if (plant instanceof Peashooter) {
-                        ((Peashooter) plant).stopBehavior();
-                    }
+                    plant.stopBehavior();
                     gamePane.getChildren().remove(plant.getNode());
                     tile.setPlant(null);
                 }
