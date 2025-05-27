@@ -72,7 +72,7 @@ public class Jump_zombie extends Zombie {
             if (eatingSound != null) eatingSound.stop();
             if (movement != null) movement.stop();
 
-            Timeline removeAfterDeath = new Timeline(new KeyFrame(Duration.seconds(0.75), e -> {
+            Timeline removeAfterDeath = new Timeline(new KeyFrame(Duration.seconds(1.5), e -> {
                 imageView.setVisible(false);
             }));
             removeAfterDeath.setCycleCount(1);

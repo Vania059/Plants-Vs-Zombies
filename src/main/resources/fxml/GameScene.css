@@ -4,5 +4,5 @@
 }
 
 .label-clickable {
-    -fx-cursor: hand;  /* đổi con trỏ chuột thành bàn tay */
+    -fx-cursor: hand;
 }

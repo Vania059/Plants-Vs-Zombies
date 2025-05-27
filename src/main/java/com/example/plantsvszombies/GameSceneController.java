@@ -2,15 +2,21 @@ package com.example.plantsvszombies;
 
 import javafx.animation.*;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -21,13 +27,15 @@ public class GameSceneController implements Initializable {
     @FXML
     private Label sunLabel;
     @FXML
-    private AnchorPane levelPane;
+    private AnchorPane level1Pane;
     @FXML
     private AnchorPane winPane;
     @FXML
     private AnchorPane losePane;
     @FXML
     private Label level2Label;
+    @FXML
+    TextField usernameTextField;
 
     private List<Zombie> zombies = new ArrayList<>();
     private Tile[][] grid = new Tile[5][9];
@@ -47,44 +55,36 @@ public class GameSceneController implements Initializable {
 
         plantCards = new ArrayList<>();
 
-        PlantCard peashooterCard = new PlantCard(250, "peashooter", 100, gamePane, this);
-        PlantCard sunflowerCard = new PlantCard(330, "sunflower", 50, gamePane, this);
-        PlantCard wallnutCard = new PlantCard(410, "walnut", 50, gamePane, this);
-        PlantCard cherrybombCard = new PlantCard(490, "cherrybomb", 150, gamePane, this);
+        PlantCard peashooterCard = new PlantCard(190, "peashooter", 100, gamePane, this);
+        PlantCard sunflowerCard = new PlantCard(270, "sunflower", 50, gamePane, this);
+        PlantCard wallnutCard = new PlantCard(350, "walnut", 50, gamePane, this);
+        PlantCard cherrybombCard = new PlantCard(430, "cherrybomb", 150, gamePane, this);
 
         plantCards.add(peashooterCard);
         plantCards.add(sunflowerCard);
         plantCards.add(wallnutCard);
         plantCards.add(cherrybombCard);
 
-        // Sau đó cập nhật trạng thái theo điểm mặt trời
         updatePlantCards();
 
-        // Đặt vị trí ban đầu: ở ngoài cùng dưới màn hình
-        levelPane.setTranslateY(540); // Giả sử scene cao khoảng 540px
+        level1Pane.setTranslateY(540);
 
-        // Bước 1: Pane chạy từ dưới lên giữa (300)
-        TranslateTransition up = new TranslateTransition(Duration.seconds(1), levelPane);
-        up.setToY(0); // Đi lên giữa màn hình
+        TranslateTransition up = new TranslateTransition(Duration.seconds(1), level1Pane);
+        up.setToY(0);
 
-        // Bước 2: Dừng lại 2 giây ở giữa
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
-        // Bước 3: Chạy từ giữa xuống lại dưới
-        TranslateTransition down = new TranslateTransition(Duration.seconds(1), levelPane);
-        down.setToY(540); // Quay về vị trí dưới
+        TranslateTransition down = new TranslateTransition(Duration.seconds(1), level1Pane);
+        down.setToY(540);
 
-        // Khi kết thúc chạy xuống thì ẩn pane
-        down.setOnFinished(event -> levelPane.setVisible(false));
+        down.setOnFinished(event -> level1Pane.setVisible(false));
 
-        // Kết hợp chuỗi
         up.setOnFinished(e -> pause.play());
         pause.setOnFinished(e -> down.play());
 
-        // Bắt đầu chuỗi
         up.play();
-        levelPane.toFront();
-        levelPane.setVisible(true);
+        level1Pane.toFront();
+        level1Pane.setVisible(true);
 
         level2Label.setOnMouseClicked(event -> {
             startLevel2();
@@ -283,6 +283,26 @@ public class GameSceneController implements Initializable {
         scale.setToY(1.0);
         scale.setCycleCount(1);
         scale.play();
+    }
+
+    public void switchToMainMenu(javafx.event.ActionEvent event) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));
+            Parent root = loader.load();
+
+            UsernameController controller = loader.getController();
+            controller.display(usernameTextField.getText()); // Gửi username sang MainMenuController
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/fxml/MainMenu.css").toExternalForm());
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void startLevel2() {

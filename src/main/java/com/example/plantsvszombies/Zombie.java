@@ -70,14 +70,13 @@ public abstract class Zombie {
 
             Plant targetPlant = null;
 
-            if (row >= 0 && row < grid.length) {
+            if (row >= 0 && row < grid.length && imageView.getLayoutX() >= 95) {
                 for (Tile tile : grid[row]) {
                     Plant plant = tile.getPlant();
                     if (plant != null && plant.getNode() != null) {
                         double zombieX = imageView.getLayoutX();
                         double plantX = plant.getNode().getLayoutX();
-
-                        if (Math.abs(zombieX - plantX) < 5) { // thử 30, có thể chỉnh 40 hoặc 25 tùy hình ảnh
+                        if (Math.abs(zombieX - plantX) < 5) {
                             foundPlant = true;
                             targetPlant = plant;
                             break;
@@ -86,16 +85,7 @@ public abstract class Zombie {
                 }
             }
 
-            if (isWalking && !foundPlant) {
-                imageView.setLayoutX(imageView.getLayoutX() - speed); // Di chuyển bình thường
-
-                // Kiểm tra nếu chạm mép trái màn hình
-                if (imageView.getLayoutX() <= 10) {
-                    movement.stop(); // Dừng chuyển động
-                    controller.showLoseScreen(); // HIỆN losePane
-                }
-
-            } else if (foundPlant) {
+            if (foundPlant) {
                 startEating();
                 movement.stop(); // Dừng di chuyển để ăn
 
@@ -149,8 +139,14 @@ public abstract class Zombie {
                 }));
                 biteTimer.setCycleCount(Timeline.INDEFINITE);
                 biteTimer.play();
+            } else {
+                // Không còn plant, zombie LUÔN tiếp tục di chuyển trái cho tới khi hết sân
+                imageView.setLayoutX(imageView.getLayoutX() - speed);
+                if (imageView.getLayoutX() <= 0) {
+                    movement.stop();
+                    controller.showLoseScreen();
+                }
             }
-
         }));
         movement.setCycleCount(Timeline.INDEFINITE);
         movement.play();

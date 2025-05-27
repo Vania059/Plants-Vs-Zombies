@@ -51,7 +51,7 @@ public class Boss_zombie extends Zombie {
             if (Sound != null) Sound.stop();
             if (eatingSound != null) eatingSound.stop();
             if (movement != null) movement.stop();
-            Timeline removeAfterDeath = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+            Timeline removeAfterDeath = new Timeline(new KeyFrame(Duration.seconds(1.5), e -> {
                 imageView.setVisible(false);
             }));
             removeAfterDeath.setCycleCount(1);

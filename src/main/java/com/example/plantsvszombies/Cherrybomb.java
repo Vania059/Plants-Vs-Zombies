@@ -64,6 +64,8 @@ public class Cherrybomb extends Plant{
         // Bước 3: Sau 3.2 giây (tức 2 giây sau khi nổ), ẩn luôn hình
         Timeline disappear = new Timeline(new KeyFrame(Duration.seconds(3.2), e -> {
             imageView.setVisible(false);  // hoặc remove hẳn nếu muốn
+            tile.setPlant(null);
+            pane.getChildren().remove(getNode());
             System.out.println("Cherrybomb has disappeared!");
         }));
 
