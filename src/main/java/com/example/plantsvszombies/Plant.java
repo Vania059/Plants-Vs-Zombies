@@ -20,4 +20,11 @@ public abstract class Plant {
     public abstract Node getNode();
 
     public abstract void startBehavior();
+    public void die() {
+        // Xóa cây khỏi Tile và UI
+        tile.clearPlant();
+        if (pane.getChildren().contains(this.getNode())) {
+            pane.getChildren().remove(this.getNode());
+        }
+    }
 }

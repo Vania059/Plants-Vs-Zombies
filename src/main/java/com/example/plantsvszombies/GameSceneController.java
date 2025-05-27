@@ -118,7 +118,7 @@ public class GameSceneController implements Initializable {
         spawnTimeline.setCycleCount(10); // hoặc Timeline.INDEFINITE nếu muốn lặp mãi
 
         // Tạo PauseTransition 15s trước khi bắt đầu spawn
-        PauseTransition delay = new PauseTransition(Duration.seconds(15));
+        PauseTransition delay = new PauseTransition(Duration.seconds(30));
         delay.setOnFinished(event -> {
             // Spawn lần đầu sau 15s
             Media media = new Media(PlayGame.class.getResource("/Audio/zombies_coming.mp3").toString());

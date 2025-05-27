@@ -81,4 +81,8 @@ public class Cherrybomb extends Plant{
 
     @Override
     public void startBehavior() {}
+
+    @Override
+    public void die() {
+    }
 }

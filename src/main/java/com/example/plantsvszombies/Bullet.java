@@ -33,7 +33,7 @@ public class Bullet {
 
         // Di chuyển viên đạn sang phải (giữ nguyên trục y)
         TranslateTransition move = new TranslateTransition(Duration.seconds(2.5), bulletView);
-        move.setByX(600); // có thể điều chỉnh cho phù hợp chiều rộng sân
+        move.setByX(650); // có thể điều chỉnh cho phù hợp chiều rộng sân
         move.setCycleCount(1);
         move.setOnFinished(e -> {
             // Dừng kiểm tra va chạm khi bullet hết hành trình
@@ -48,7 +48,7 @@ public class Bullet {
                 // Kiểm tra zombie còn sống và visible
                 if (zombie.getView().isVisible() && bulletView.getBoundsInParent().intersects(zombie.getView().getBoundsInParent())) {
                     // Gây damage (ví dụ 1 máu)
-                    zombie.takeDamage(1);
+                    zombie.takeDamage(10);
                     hit = true;
                     // Remove bullet khỏi pane
                     pane.getChildren().remove(bulletView);

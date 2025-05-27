@@ -8,6 +8,10 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.effect.ColorAdjust;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 
 public abstract class Zombie {
@@ -23,6 +27,7 @@ public abstract class Zombie {
     protected String soundPath;
     protected MediaPlayer eatingSound;
     protected Image deadImage;
+
 
 
     public Zombie(String jumpGifPath, String walkGifPath, String eatGifPath, String deadGifPath, String soundPath, String eatingSoundPath, int HP, double speed, int x, int y, boolean isWalking) {
@@ -116,10 +121,26 @@ public abstract class Zombie {
     public abstract void startEating();
     public abstract void die();
     public void takeDamage(int damage) {
-        HP -= damage;
+        this.HP -= damage;
+
         if (HP <= 0) {
             die();
+            return;
         }
+
+        // Hiệu ứng chớp trắng nhẹ
+        ColorAdjust flash = new ColorAdjust();
+        flash.setBrightness(0.5);  // Sáng nhẹ hơn, kiểu trong suốt
+
+        imageView.setEffect(flash);
+
+        Timeline flashTimeline = new Timeline(
+                new KeyFrame(Duration.seconds(0.1), e -> {
+                    imageView.setEffect(null);
+                })
+        );
+        flashTimeline.setCycleCount(1);
+        flashTimeline.play();
     }
     private MediaPlayer createMediaPlayer(String soundPath) {
         try {
