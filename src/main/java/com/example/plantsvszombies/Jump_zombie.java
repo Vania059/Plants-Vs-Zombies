@@ -9,6 +9,7 @@ import javafx.util.Duration;
 import static javafx.application.Application.launch;
 
 public class Jump_zombie extends Zombie {
+    private Timeline jumpTimeline;
     private boolean isJumping = true;
 
     public Jump_zombie(int x, int y, GameSceneController controller) {
@@ -20,7 +21,7 @@ public class Jump_zombie extends Zombie {
                 "/Audio/jump_zombie_voice.mp3",
                 "/Audio/normal_zombie_eat.mp3",
                 200,
-                0.5,
+                0.25,
                 x,
                 y,
                 false,
@@ -30,22 +31,21 @@ public class Jump_zombie extends Zombie {
         jump();
     }
     public void jump() {
-        Timeline jumpTimeline = new Timeline(new KeyFrame(Duration.millis(50), e -> {
-            imageView.setX(imageView.getX() - speed * 3); // tốc độ nhảy nhanh hơn đi bộ
+        this.jumpTimeline = new Timeline(new KeyFrame(Duration.millis(50), e -> {
+            imageView.setX(imageView.getX() - speed * 3);
         }));
-        jumpTimeline.setCycleCount(Timeline.INDEFINITE);
-        jumpTimeline.play();
-
-        Timeline delay = new Timeline(new KeyFrame(Duration.seconds(10), e -> {
-            isJumping = false;
-            HP = 100;
-            jumpTimeline.stop();
-            startWalking();
+        this.jumpTimeline.setCycleCount(Timeline.INDEFINITE);
+        this.jumpTimeline.play();
+        Timeline monitor = new Timeline(new KeyFrame(Duration.millis(100), e -> {
+            if (HP <= 100) {
+                isJumping = false;
+                jumpTimeline.stop();
+                startWalking();
+            }
         }));
-        delay.setCycleCount(1);
-        delay.play();
+        monitor.setCycleCount(Timeline.INDEFINITE);
+        monitor.play();
     }
-
     @Override
     public String getZombieType() {
         return "jumpZombie";
@@ -60,7 +60,9 @@ public class Jump_zombie extends Zombie {
     }
     @Override
     public void startEating() {
+        if (jumpTimeline != null) jumpTimeline.stop(); // Dừng nhảy
         isWalking = false;
+        isJumping = false;
         imageView.setImage(eatImage);
         eatingSound.play();
     }
@@ -77,17 +79,6 @@ public class Jump_zombie extends Zombie {
             }));
             removeAfterDeath.setCycleCount(1);
             removeAfterDeath.play();
-        }
-    }
-
-    public void takeDamage(int damage) {
-        HP -= damage;
-        if (HP <= 0) {
-            die();
-        } else if (isJumping && HP <= 100) {
-            // Nếu đang nhảy và bị bắn, kết thúc nhảy sớm
-            isJumping = false;
-            startWalking();
         }
     }
 }

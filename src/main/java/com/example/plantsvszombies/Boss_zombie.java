@@ -3,26 +3,25 @@ package com.example.plantsvszombies;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
-
 import java.awt.*;
 
 public class Boss_zombie extends Zombie {
     int x;
     int y;
-    public Boss_zombie(int x, int y) {
+    public Boss_zombie(int x, int y, GameSceneController controller) {
         super (
                 null,
-                "/Zombies/normal_zombie_walk.gif",
+                "/Zombies/boss_zombie_walk.gif",
                 "/Zombies/boss_zombie_hit.gif",
                 "/Zombies/boss_zombie_die.gif",
-                "/Audio/boss_zombie_voice.mp3",
+                "/Audio/normal_zombie_voice.mp3",
                 "/Audio/boss_zombie_hit.mp3",
                 300,
                 0.75,
                 x,
                 y,
                 true,
-                null
+                controller
         );
         this.x = x;
         this.y = y;
