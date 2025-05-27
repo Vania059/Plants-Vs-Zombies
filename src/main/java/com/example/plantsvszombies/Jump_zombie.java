@@ -23,7 +23,8 @@ public class Jump_zombie extends Zombie {
                 0.5,
                 x,
                 y,
-                false
+                false,
+                null
         );
         imageView.setImage(jumpImage);
         jump();

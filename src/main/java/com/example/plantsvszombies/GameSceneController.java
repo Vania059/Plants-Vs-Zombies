@@ -1,9 +1,6 @@
 package com.example.plantsvszombies;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -21,6 +18,8 @@ public class GameSceneController implements Initializable {
     @FXML private AnchorPane gamePane;
     @FXML private Label sunLabel;
     @FXML private AnchorPane levelPane;
+    @FXML private AnchorPane winPane;
+    @FXML private AnchorPane losePane;
 
     private List<Zombie> zombies = new ArrayList<>();
     private Tile[][] grid = new Tile[5][9];
@@ -31,6 +30,9 @@ public class GameSceneController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        winPane.setVisible(false);
+        losePane.setVisible(false);
+
         setupGrid();
         spawnZombies();
         startSkySun();
@@ -99,23 +101,22 @@ public class GameSceneController implements Initializable {
     }
 
     private void spawnZombies() {
-        int[] lanesY = {100, 200, 300, 400};
-        Random rand = new Random();
         int x = 1000; // vị trí ngoài scene
 
         // Tạo Timeline spawn zombie
         Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(20), e -> {
+            List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 200, 300, 400));
+            Collections.shuffle(lanes);
             for (int i = 0; i < 3; i++) {
-                int randomLaneIndex = rand.nextInt(lanesY.length);
-                int y = lanesY[randomLaneIndex];
-                Normal_zombie zombie = new Normal_zombie(x, y);
-                zombies.add(zombie); // OK vì Normal_zombie kế thừa Zombie
+                int y = lanes.get(i);
+                Normal_zombie zombie = new Normal_zombie(x, y, this);
+                zombies.add(zombie);
                 gamePane.getChildren().add(zombie.getView());
                 zombie.startWalking();
                 zombie.moveToPlant(grid);
             }
         }));
-        spawnTimeline.setCycleCount(10); // hoặc Timeline.INDEFINITE nếu muốn lặp mãi
+        spawnTimeline.setCycleCount(5); // hoặc Timeline.INDEFINITE nếu muốn lặp mãi
 
         // Tạo PauseTransition 15s trước khi bắt đầu spawn
         PauseTransition delay = new PauseTransition(Duration.seconds(30));
@@ -124,10 +125,11 @@ public class GameSceneController implements Initializable {
             Media media = new Media(PlayGame.class.getResource("/Audio/zombies_coming.mp3").toString());
             MediaPlayer mediaPlayer = new MediaPlayer(media);
             mediaPlayer.play();
+            List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 200, 300, 400));
+            Collections.shuffle(lanes);
             for (int i = 0; i < 3; i++) {
-                int randomLaneIndex = rand.nextInt(lanesY.length);
-                int y = lanesY[randomLaneIndex];
-                Normal_zombie zombie = new Normal_zombie(x, y);
+                int y = lanes.get(i);
+                Normal_zombie zombie = new Normal_zombie(x, y, this);
                 zombies.add(zombie);
                 gamePane.getChildren().add(zombie.getView());
                 zombie.startWalking();
@@ -143,7 +145,7 @@ public class GameSceneController implements Initializable {
     }
 
     public List<Zombie> getZombies() {
-        return new ArrayList<>(zombies); // hoặc return zombies nếu đã đúng kiểu
+        return zombies;
     }
 
     private void startSkySun() {
@@ -234,5 +236,38 @@ public class GameSceneController implements Initializable {
 
     public PlantCard getSelectedCard() {
         return selectedCard;
+    }
+
+    public void showWinScreen() {
+        winPane.setVisible(true);
+        winPane.toFront();
+        winPane.setOpacity(1);
+        winPane.setScaleX(0.1);
+        winPane.setScaleY(0.1);
+
+        ScaleTransition scale = new ScaleTransition(Duration.seconds(0.5), winPane);
+        scale.setFromX(0.1);
+        scale.setFromY(0.1);
+        scale.setToX(1.0);
+        scale.setToY(1.0);
+        scale.setCycleCount(0);
+        scale.play();
+    }
+
+    public void showLoseScreen() {
+        losePane.setVisible(true);
+        losePane.toFront();
+        losePane.setOpacity(1);
+        losePane.setScaleX(0.1);
+        losePane.setScaleY(0.1);
+
+        // Phóng to lên 1.0 trong 0.5 giây
+        ScaleTransition scale = new ScaleTransition(Duration.seconds(0.5), losePane);
+        scale.setFromX(0.1);
+        scale.setFromY(0.1);
+        scale.setToX(1.0);
+        scale.setToY(1.0);
+        scale.setCycleCount(0);
+        scale.play();
     }
 }

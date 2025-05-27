@@ -27,14 +27,18 @@ public abstract class Zombie {
     protected String soundPath;
     protected MediaPlayer eatingSound;
     protected Image deadImage;
+    protected GameSceneController controller;
 
 
 
-    public Zombie(String jumpGifPath, String walkGifPath, String eatGifPath, String deadGifPath, String soundPath, String eatingSoundPath, int HP, double speed, int x, int y, boolean isWalking) {
-        this.walkImage = new Image(getClass().getResource(walkGifPath).toExternalForm());;
-        this.eatImage = new Image(getClass().getResource(eatGifPath).toExternalForm());;
+    public Zombie(String jumpGifPath, String walkGifPath, String eatGifPath, String deadGifPath, String soundPath, String eatingSoundPath, int HP, double speed, int x, int y, boolean isWalking, GameSceneController controller) {
+        if (jumpGifPath != null) {
+            this.jumpImage = new Image(getClass().getResource(jumpGifPath).toExternalForm());
+        }
+        this.walkImage = new Image(getClass().getResource(walkGifPath).toExternalForm());
+        this.eatImage = new Image(getClass().getResource(eatGifPath).toExternalForm());
         this.imageView = new ImageView(walkImage);
-        this.deadImage = new Image(getClass().getResource(deadGifPath).toExternalForm());;
+        this.deadImage = new Image(getClass().getResource(deadGifPath).toExternalForm());
         this.imageView.setFitWidth(200);
         this.imageView.setFitHeight(200);
         this.imageView.setPreserveRatio(true);
@@ -43,6 +47,7 @@ public abstract class Zombie {
         this.HP = HP;
         this.speed = speed;
         this.isWalking = isWalking;
+        this.controller = controller;
         Sound = createMediaPlayer(soundPath);
         Sound.setCycleCount(MediaPlayer.INDEFINITE);
         Sound.play();
@@ -83,6 +88,13 @@ public abstract class Zombie {
 
             if (isWalking && !foundPlant) {
                 imageView.setLayoutX(imageView.getLayoutX() - speed); // Di chuyển bình thường
+
+                // Kiểm tra nếu chạm mép trái màn hình
+                if (imageView.getLayoutX() <= 10) {
+                    movement.stop(); // Dừng chuyển động
+                    controller.showLoseScreen(); // HIỆN losePane
+                }
+
             } else if (foundPlant) {
                 startEating();
                 movement.stop(); // Dừng di chuyển để ăn

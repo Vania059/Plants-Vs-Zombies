@@ -63,6 +63,7 @@ public class PlayGame extends Application {
     public static void main(String[] args) {
         Media media = new Media(PlayGame.class.getResource("/Audio/Crazy Dave (Intro Theme).mp3").toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
         launch(args);
     }

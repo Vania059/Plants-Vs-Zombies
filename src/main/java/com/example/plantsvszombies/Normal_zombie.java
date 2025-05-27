@@ -10,7 +10,7 @@ public class Normal_zombie extends Zombie {
     int x;
     int y;
 
-    public Normal_zombie(int x, int y) {
+    public Normal_zombie(int x, int y, GameSceneController controller) {
         super(
                 null,
                 "/Zombies/normal_zombie_walk.gif",
@@ -22,7 +22,8 @@ public class Normal_zombie extends Zombie {
                 0.5,
                 x,
                 y,
-                true
+                true,
+                controller
         );
         this.x = x;
         this.y = y;
@@ -50,8 +51,17 @@ public class Normal_zombie extends Zombie {
         if (Sound != null) Sound.stop();
         if (eatingSound != null) eatingSound.stop();
         if (movement != null) movement.stop();
-        Timeline removeAfterDeath = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+        Timeline removeAfterDeath = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
             imageView.setVisible(false);
+
+            // 🔴 REMOVE zombie khỏi danh sách
+            if (controller != null) {
+                controller.getZombies().remove(this); // remove khỏi danh sách
+                if (controller.getZombies().isEmpty()) {
+                    controller.showWinScreen(); // Hiện màn hình thắng
+                }
+            }
+
         }));
         removeAfterDeath.setCycleCount(1);
         removeAfterDeath.play();

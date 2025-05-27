@@ -21,7 +21,8 @@ public class Boss_zombie extends Zombie {
                 0.75,
                 x,
                 y,
-                true
+                true,
+                null
         );
         this.x = x;
         this.y = y;

@@ -33,5 +33,75 @@
             </Label>
          </children>
       </AnchorPane>
+      <AnchorPane fx:id="winPane" layoutX="180" layoutY="70" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <ImageView fitHeight="400.0" fitWidth="600.0">
+               <image>
+                  <Image url="@../Screen/ResultBG.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="252.0" layoutY="116.0" text="YOU WIN!!" textFill="#fff8f8">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="199.0" layoutY="177.0" prefHeight="30.0" prefWidth="218.0" text="Continue to level 2?" textFill="#fff8f8">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="39.0" fitWidth="96.0" layoutX="191.0" layoutY="247.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Screen/Button.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="32.0" fitWidth="106.0" layoutX="315.0" layoutY="247.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Screen/Button.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="200.0" layoutY="253.0" text="Back to Menu" textFill="WHITE" styleClass="label-clickable"/>
+            <Label alignment="CENTER" layoutX="344.0" layoutY="253.0" text="Level 2" textFill="WHITE" styleClass="label-clickable"/>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="losePane" layoutX="180" layoutY="70" prefHeight="400" prefWidth="600">
+         <children>
+            <ImageView fitHeight="400.0" fitWidth="600.0" layoutX="-67.0" layoutY="153.0">
+               <image>
+                  <Image url="@../Screen/ResultBG.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="182.0" layoutY="277.0" text="YOU LOSE!!" textFill="#fff8f8">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="124.0" layoutY="323.0" prefHeight="30.0" prefWidth="218.0" text="Play again?" textFill="#fff8f8">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="39.0" fitWidth="96.0" layoutX="124.0" layoutY="397.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Screen/Button.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="39.0" fitWidth="96.0" layoutX="239.0" layoutY="397.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Screen/Button.png" />
+               </image>
+            </ImageView>
+            <Label alignment="CENTER" layoutX="124.0" layoutY="398.0" prefHeight="30.0" prefWidth="96.0" text="Back to Menu" textFill="#fff8f8" styleClass="label-clickable">
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="239.0" layoutY="398.0" prefHeight="30.0" prefWidth="96.0" text="Replay" textFill="#fff8f8" styleClass="label-clickable">
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
