@@ -16,7 +16,7 @@ public class Bullet {
     private boolean hit = false;
     private Pane pane;
 
-    public Bullet(double x, double y, Pane pane, List<Zombie> zombies) {
+    public Bullet(double x, double y, Pane pane, List<Zombie> zombies, GameSceneController controller) {
         this.pane = pane;
 
         // Load the bullet image
@@ -28,6 +28,8 @@ public class Bullet {
         // Đặt viên đạn xuất phát từ đúng đầu họng súng (giữa viên đạn trùng với điểm (x, y) truyền vào)
         bulletView.setLayoutX(x - bulletView.getFitWidth() / 2);
         bulletView.setLayoutY(y - bulletView.getFitHeight() / 2);
+
+        bulletView.setUserData("bullet");
 
         pane.getChildren().add(bulletView);
 

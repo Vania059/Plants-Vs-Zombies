@@ -99,7 +99,6 @@ public abstract class Zombie {
                 startEating();
                 movement.stop(); // Dừng di chuyển để ăn
 
-                // cần biến final để dùng trong lambda
 
                 final Plant finalTargetPlant = targetPlant;
                 Timeline biteTimer = new Timeline();
@@ -117,7 +116,34 @@ public abstract class Zombie {
                             moveToPlant(grid); // Tiếp tục di chuyển
                         }
                     }
-                    // TODO: thêm các loại plant khác nếu cần
+
+                    if (finalTargetPlant instanceof Sunflower sunflower) {
+                        sunflower.beEatenBy(this);
+
+                        if (!sunflower.getNode().isVisible()) {
+                            ev.consume(); // Ngừng timeline biteTimer
+                            biteTimer.stop();
+                            isWalking = true;
+                            imageView.setImage(walkImage);
+                            if (eatingSound != null) eatingSound.stop(); // Tắt âm thanh ăn
+                            if (Sound != null) Sound.play(); // Phát lại âm thanh đi bộ
+                            moveToPlant(grid); // Tiếp tục di chuyển
+                        }
+                    }
+
+                    if (finalTargetPlant instanceof Wallnut wallnut) {
+                        wallnut.beEatenBy(this);
+
+                        if (!wallnut.getNode().isVisible()) {
+                            ev.consume(); // Ngừng timeline biteTimer
+                            biteTimer.stop();
+                            isWalking = true;
+                            imageView.setImage(walkImage);
+                            if (eatingSound != null) eatingSound.stop(); // Tắt âm thanh ăn
+                            if (Sound != null) Sound.play(); // Phát lại âm thanh đi bộ
+                            moveToPlant(grid); // Tiếp tục di chuyển
+                        }
+                    }
 
 
                 }));

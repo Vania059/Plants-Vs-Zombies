@@ -1,3 +1,4 @@
+/*
 package Wallnut;
 
 import javafx.scene.image.Image;
@@ -55,3 +56,4 @@ public class Wallnut {
         }
     }
 }
+*/

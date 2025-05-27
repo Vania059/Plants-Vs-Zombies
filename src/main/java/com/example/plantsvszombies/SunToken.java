@@ -27,6 +27,7 @@ public class SunToken {
         sunView.setFitHeight(50);
         sunView.setX(x - 30);
         sunView.setY(y - 30);
+        sunView.setUserData("suntoken");
 
         pane.getChildren().add(sunView);
 

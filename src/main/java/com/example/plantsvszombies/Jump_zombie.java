@@ -11,7 +11,7 @@ import static javafx.application.Application.launch;
 public class Jump_zombie extends Zombie {
     private boolean isJumping = true;
 
-    public Jump_zombie(int x, int y) {
+    public Jump_zombie(int x, int y, GameSceneController controller) {
         super(
                 "/Zombies/jump_zombie_jump.gif",
                 "/Zombies/jump_zombie_walk.gif",
@@ -24,7 +24,7 @@ public class Jump_zombie extends Zombie {
                 x,
                 y,
                 false,
-                null
+                controller
         );
         imageView.setImage(jumpImage);
         jump();

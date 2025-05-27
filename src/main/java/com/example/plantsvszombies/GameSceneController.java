@@ -3,6 +3,7 @@ package com.example.plantsvszombies;
 import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -15,11 +16,18 @@ import java.util.*;
 
 public class GameSceneController implements Initializable {
 
-    @FXML private AnchorPane gamePane;
-    @FXML private Label sunLabel;
-    @FXML private AnchorPane levelPane;
-    @FXML private AnchorPane winPane;
-    @FXML private AnchorPane losePane;
+    @FXML
+    private AnchorPane gamePane;
+    @FXML
+    private Label sunLabel;
+    @FXML
+    private AnchorPane levelPane;
+    @FXML
+    private AnchorPane winPane;
+    @FXML
+    private AnchorPane losePane;
+    @FXML
+    private Label level2Label;
 
     private List<Zombie> zombies = new ArrayList<>();
     private Tile[][] grid = new Tile[5][9];
@@ -39,7 +47,7 @@ public class GameSceneController implements Initializable {
 
         plantCards = new ArrayList<>();
 
-        PlantCard peashooterCard = new PlantCard(250, "peashooter", 100, gamePane , this);
+        PlantCard peashooterCard = new PlantCard(250, "peashooter", 100, gamePane, this);
         PlantCard sunflowerCard = new PlantCard(330, "sunflower", 50, gamePane, this);
         PlantCard wallnutCard = new PlantCard(410, "walnut", 50, gamePane, this);
         PlantCard cherrybombCard = new PlantCard(490, "cherrybomb", 150, gamePane, this);
@@ -77,6 +85,10 @@ public class GameSceneController implements Initializable {
         up.play();
         levelPane.toFront();
         levelPane.setVisible(true);
+
+        level2Label.setOnMouseClicked(event -> {
+            startLevel2();
+        });
     }
 
     private void setupGrid() {
@@ -218,7 +230,7 @@ public class GameSceneController implements Initializable {
         if (plant != null) {
             tile.setPlant(plant);
             gamePane.getChildren().addAll(plant.getNode());
-            deductSunPoints(cost); // 🔴 Trừ điểm tại đây
+            deductSunPoints(cost); // Trừ điểm tại đây
             // >>> Thêm dòng này: reset selectedCard sau khi trồng!
             selectedCard = null;
             // >>> Optionally: cập nhật trạng thái hiển thị (bỏ highlight)
@@ -269,5 +281,76 @@ public class GameSceneController implements Initializable {
         scale.setToY(1.0);
         scale.setCycleCount(0);
         scale.play();
+    }
+
+    public void startLevel2() {
+        // Ẩn winPane
+        winPane.setVisible(false);
+
+        // Xóa zombie cũ
+        for (Zombie zombie : zombies) {
+            gamePane.getChildren().remove(zombie.getView());
+        }
+        zombies.clear();
+
+        // Xóa plants trên grid
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 9; col++) {
+                Tile tile = grid[row][col];
+                if (tile.hasPlant()) {
+                    Plant plant = tile.getPlant();
+                    if (plant instanceof Sunflower) {
+                        ((Sunflower) plant).stopBehavior();
+                    }
+                    if (plant instanceof Peashooter) {
+                        ((Peashooter) plant).stopBehavior();
+                    }
+                    gamePane.getChildren().remove(plant.getNode());
+                    tile.setPlant(null);
+                }
+            }
+        }
+
+        List<Node> nodesToRemove = new ArrayList<>();
+        for (Node node : gamePane.getChildren()) {
+            Object ud = node.getUserData();
+            if ("bullet".equals(ud) || "suntoken".equals(ud)) {
+                nodesToRemove.add(node);
+            }
+        }
+        gamePane.getChildren().removeAll(nodesToRemove);
+
+        // Reset sunPoints
+        sunPoints = 0; // hoặc theo ý bạn
+        sunLabel.setText("" + sunPoints);
+
+        // Bắt đầu spawn zombie cho level 2
+        spawnZombiesLevel2();
+    }
+
+    private void spawnZombiesLevel2() {
+        int x = 1000;
+
+        // VD: spawn cả Normal_zombie và Jump_zombie
+        Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(12), e -> {
+            List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 200, 300, 400));
+            Collections.shuffle(lanes);
+            for (int i = 0; i < 2; i++) {
+                int y = lanes.get(i);
+                Normal_zombie zombie = new Normal_zombie(x, y, this);
+                zombies.add(zombie);
+                gamePane.getChildren().add(zombie.getView());
+                zombie.startWalking();
+                zombie.moveToPlant(grid);
+            }
+            // Thêm Jump_zombie vào lane khác
+            int yj = lanes.get(2);
+            Jump_zombie jumpZombie = new Jump_zombie(x, yj, this);
+            zombies.add(jumpZombie);
+            gamePane.getChildren().add(jumpZombie.getView());
+            // jumpZombie sẽ tự startJumpingAndMoving trong constructor
+        }));
+        spawnTimeline.setCycleCount(7); // nhiều wave hơn level 1
+        spawnTimeline.play();
     }
 }
