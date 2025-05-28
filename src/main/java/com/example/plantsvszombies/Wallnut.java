@@ -4,7 +4,6 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,6 +59,7 @@ public class Wallnut extends Plant{
             imageView.setVisible(false);
             tile.setPlant(null);
             pane.getChildren().remove(getNode());
+            zombie.startWalking();
             System.out.println("Wallnut has been eaten by " + zombieType + "!");
         }
     }

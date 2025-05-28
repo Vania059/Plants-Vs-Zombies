@@ -160,7 +160,7 @@ public class GameSceneController implements Initializable {
             Collections.shuffle(lanes);
             for (int i = 0; i < 3; i++) {
                 int y = lanes.get(i);
-                Jump_zombie zombie = new Jump_zombie(x, y, this);
+                Normal_zombie zombie = new Normal_zombie(x, y, this);
                 zombies.add(zombie);
                 gamePane.getChildren().add(zombie.getView());
                 zombie.startWalking();

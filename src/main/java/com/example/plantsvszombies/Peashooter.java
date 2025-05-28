@@ -7,7 +7,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import javafx.scene.Node;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +15,7 @@ public class Peashooter extends Plant{
     private final GameSceneController controller;
     private final Map<String, Integer> biteLimits;
     private int remainingHealth;
-    private boolean isDead = false;
+    public boolean isDead = false;
     private Timeline bulletFiring;
 
     public Peashooter(Tile tile, Pane pane, GameSceneController controller) {
@@ -84,6 +83,7 @@ public class Peashooter extends Plant{
     }
 
     public void beEatenBy(Zombie zombie) {
+
         String zombieType = zombie.getZombieType();
 
         if (!biteLimits.containsKey(zombieType)) {
@@ -93,7 +93,6 @@ public class Peashooter extends Plant{
 
         int maxBites = biteLimits.get(zombieType);
 
-        // Nếu zombie mới cắn, reset remainingHealth nếu cần
         if (remainingHealth > maxBites) {
             remainingHealth = maxBites;
         }
@@ -103,10 +102,12 @@ public class Peashooter extends Plant{
         System.out.println(this.getClass().getSimpleName() + " bitten by " + zombieType + ". Remaining health: " + remainingHealth);
 
         if (remainingHealth <= 0) {
+            isDead = true; // ← Đánh dấu cây đã chết
             imageView.setVisible(false);
             stopBehavior();
             tile.setPlant(null);
             pane.getChildren().remove(getNode());
+            zombie.startWalking();
             System.out.println(this.getClass().getSimpleName() + " has been eaten by " + zombieType + "!");
         }
     }

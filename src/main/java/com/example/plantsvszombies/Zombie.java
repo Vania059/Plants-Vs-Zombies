@@ -62,6 +62,7 @@ public abstract class Zombie {
     public abstract String getZombieType();
 
     public void moveToPlant(Tile[][] grid) {
+        if (movement != null) return;
         movement = new Timeline(new KeyFrame(Duration.millis(50), e -> {
             boolean foundPlant = false;
 
@@ -86,16 +87,15 @@ public abstract class Zombie {
             }
 
             if (foundPlant) {
-                startEating();
-                movement.stop(); // Dừng di chuyển để ăn
-
+                movement.stop();
+                movement = null;
+                startEating(); // Dừng di chuyển để ăn
 
                 final Plant finalTargetPlant = targetPlant;
                 Timeline biteTimer = new Timeline();
                 biteTimer.getKeyFrames().add(new KeyFrame(Duration.seconds(1.5), ev -> {
                     if (finalTargetPlant instanceof Peashooter peashooter) {
                         peashooter.beEatenBy(this);
-
                         if (!peashooter.getNode().isVisible()) {
                             ev.consume(); // Ngừng timeline biteTimer
                             biteTimer.stop();

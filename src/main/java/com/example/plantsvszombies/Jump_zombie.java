@@ -11,6 +11,7 @@ import static javafx.application.Application.launch;
 public class Jump_zombie extends Zombie {
     private Timeline jumpTimeline;
     private boolean isJumping = true;
+    private boolean isEating = false;
 
     public Jump_zombie(int x, int y, GameSceneController controller) {
         super(
@@ -37,10 +38,14 @@ public class Jump_zombie extends Zombie {
         this.jumpTimeline.setCycleCount(Timeline.INDEFINITE);
         this.jumpTimeline.play();
         Timeline monitor = new Timeline(new KeyFrame(Duration.millis(100), e -> {
-            if (HP <= 100) {
+            if (HP <= 100 && !isEating) {
                 isJumping = false;
                 jumpTimeline.stop();
                 startWalking();
+            } else if (!isEating && HP >= 100 && !isJumping) {
+                isJumping = true;
+                jumpTimeline.play();
+                imageView.setImage(jumpImage);
             }
         }));
         monitor.setCycleCount(Timeline.INDEFINITE);
@@ -55,12 +60,15 @@ public class Jump_zombie extends Zombie {
     public void startWalking() {
         if (!isJumping && HP > 0) {
             isWalking = true;
+            isEating = false;
             imageView.setImage(walkImage);
         }
     }
     @Override
     public void startEating() {
         if (jumpTimeline != null) jumpTimeline.stop(); // Dừng nhảy
+        if (movement != null) movement.stop();
+        isEating = true;
         isWalking = false;
         isJumping = false;
         imageView.setImage(eatImage);

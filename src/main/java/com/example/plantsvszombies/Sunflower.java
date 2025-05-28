@@ -78,6 +78,7 @@ public class Sunflower extends Plant{
             stopBehavior();
             tile.setPlant(null);
             pane.getChildren().remove(getNode());
+            zombie.startWalking();
             System.out.println("Sunflower has been eaten by " + zombieType + "!");
         }
     }

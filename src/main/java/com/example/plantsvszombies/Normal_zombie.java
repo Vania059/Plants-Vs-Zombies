@@ -7,8 +7,10 @@ import javafx.util.Duration;
 import static javafx.application.Application.launch;
 
 public class Normal_zombie extends Zombie {
+    private boolean isEating = false;
     int x;
     int y;
+    private Tile tile;
 
     public Normal_zombie(int x, int y, GameSceneController controller) {
         super(
@@ -42,6 +44,7 @@ public class Normal_zombie extends Zombie {
     @Override
     public void startEating() {
         isWalking = false;
+        isEating = true;
         imageView.setImage(eatImage);
         eatingSound.play();
     }
