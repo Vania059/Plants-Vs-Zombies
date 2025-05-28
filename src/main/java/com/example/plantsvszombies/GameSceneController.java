@@ -58,7 +58,6 @@ public class GameSceneController implements Initializable {
         losePane.setVisible(false);
 
         setupGrid();
-        spawnZombies();
         startSkySun();
 
         plantCards = new ArrayList<>();
@@ -150,7 +149,7 @@ public class GameSceneController implements Initializable {
         spawnTimeline.setCycleCount(5); // hoặc Timeline.INDEFINITE nếu muốn lặp mãi
 
         // Tạo PauseTransition 15s trước khi bắt đầu spawn
-        PauseTransition delay = new PauseTransition(Duration.seconds(30));
+        PauseTransition delay = new PauseTransition(Duration.seconds(10));
         delay.setOnFinished(event -> {
             // Spawn lần đầu sau 15s
             Media media = new Media(PlayGame.class.getResource("/Audio/zombies_coming.mp3").toString());
@@ -160,7 +159,7 @@ public class GameSceneController implements Initializable {
             Collections.shuffle(lanes);
             for (int i = 0; i < 3; i++) {
                 int y = lanes.get(i);
-                Normal_zombie zombie = new Normal_zombie(x, y, this);
+                Jump_zombie zombie = new Jump_zombie(x, y, this);
                 zombies.add(zombie);
                 gamePane.getChildren().add(zombie.getView());
                 zombie.startWalking();

@@ -32,7 +32,7 @@ public class Jump_zombie extends Zombie {
     }
     public void jump() {
         this.jumpTimeline = new Timeline(new KeyFrame(Duration.millis(50), e -> {
-            imageView.setX(imageView.getX() - speed * 3);
+            imageView.setLayoutX(imageView.getLayoutX() - speed * 3);
         }));
         this.jumpTimeline.setCycleCount(Timeline.INDEFINITE);
         this.jumpTimeline.play();
