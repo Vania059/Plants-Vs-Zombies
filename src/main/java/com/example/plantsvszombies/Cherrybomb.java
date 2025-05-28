@@ -100,7 +100,8 @@ public class Cherrybomb extends Plant{
     @Override
     public void stopBehavior() {}
 
-    public void beEatenBy(String zombieType) {
+    public void beEatenBy(Zombie zombie) {
+        String zombieType = zombie.getZombieType();
         if (!validZombieTypes.contains(zombieType)) {
             System.out.println("Unknown zombie type: " + zombieType);
             return;
@@ -111,6 +112,7 @@ public class Cherrybomb extends Plant{
             imageView.setVisible(false); // hoặc remove khỏi pane
             tile.setPlant(null);
             pane.getChildren().remove(getNode());
+            zombie.startWalking();
             System.out.println("Cherrybomb was eaten by " + zombieType + " before exploding!");
         }
     }
