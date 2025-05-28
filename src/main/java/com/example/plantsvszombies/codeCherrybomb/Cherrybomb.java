@@ -1,3 +1,4 @@
+/*
 package Cherrybomb;
 
 import javafx.animation.KeyFrame;
@@ -74,3 +75,4 @@ public class Cherrybomb {
         }
     }
 }
+*/

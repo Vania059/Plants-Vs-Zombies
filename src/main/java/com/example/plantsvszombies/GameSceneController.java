@@ -45,7 +45,8 @@ public class GameSceneController implements Initializable {
 
     private enum Level {
         LEVEL_1,
-        LEVEL_2
+        LEVEL_2,
+        LEVEL_3
     }
 
     public void setUsername(String username) {
@@ -400,7 +401,7 @@ public class GameSceneController implements Initializable {
 
         // VD: spawn cả Normal_zombie và Jump_zombie
         Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(12), e -> {
-            List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 200, 300, 400));
+            List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 200, 290, 380));
             Collections.shuffle(lanes);
             for (int i = 0; i < 2; i++) {
                 int y = lanes.get(i);
@@ -420,6 +421,61 @@ public class GameSceneController implements Initializable {
             // jumpZombie sẽ tự startJumpingAndMoving trong constructor
         }));
         spawnTimeline.setCycleCount(7); // nhiều wave hơn level 1
+        spawnTimeline.play();
+    }
+
+    private void spawnZombiesLevel3() {
+        int x = 1000;
+
+        // VD: spawn cả Normal_zombie và Jump_zombie
+        Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(12), e -> {
+            List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 200, 290, 380));
+            Collections.shuffle(lanes);
+
+            Random rand = new Random();
+            double t1 = 1 + rand.nextDouble() * 3;  // khoảng 1-4s
+            double t2 = 4 + rand.nextDouble() * 3;  // khoảng 4-7s
+            double t3 = 7 + rand.nextDouble() * 3;  // khoảng 7-10s
+
+            // Normal_zombie
+            PauseTransition delay1 = new PauseTransition(Duration.seconds(t1));
+            delay1.setOnFinished(ev -> {
+                int y1 = lanes.get(0);
+                Normal_zombie normalZombie = new Normal_zombie(x, y1, this);
+                zombies.add(normalZombie);
+                gamePane.getChildren().add(normalZombie.getView());
+                normalZombie.startWalking();
+                normalZombie.moveToPlant(grid);
+            });
+
+            // Jump_zombie
+            PauseTransition delay2 = new PauseTransition(Duration.seconds(t2));
+            delay2.setOnFinished(ev -> {
+                int y2 = lanes.get(1);
+                Jump_zombie jumpZombie = new Jump_zombie(x, y2, this);
+                zombies.add(jumpZombie);
+                gamePane.getChildren().add(jumpZombie.getView());
+                jumpZombie.jump();
+                jumpZombie.moveToPlant(grid);
+            });
+
+            // Boss_zombie
+            PauseTransition delay3 = new PauseTransition(Duration.seconds(t3));
+            delay3.setOnFinished(ev -> {
+                int y3 = lanes.get(2);
+                Boss_zombie bossZombie = new Boss_zombie(x, y3, this);
+                zombies.add(bossZombie);
+                gamePane.getChildren().add(bossZombie.getView());
+                bossZombie.startWalking();
+                bossZombie.moveToPlant(grid);
+            });
+
+            delay1.play();
+            delay2.play();
+            delay3.play();
+        }));
+
+        spawnTimeline.setCycleCount(10); // 10 wave
         spawnTimeline.play();
     }
 }
