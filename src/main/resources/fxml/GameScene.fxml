@@ -22,14 +22,14 @@
          <font>
             <Font name="Arial Rounded MT Bold" size="12.666666984558105" />
          </font></Label>
-      <AnchorPane fx:id="level1Pane" layoutX="281.0" layoutY="175.0" prefHeight="190.0" prefWidth="460.0">
+      <AnchorPane fx:id="levelPane" layoutX="281.0" layoutY="175.0" prefHeight="190.0" prefWidth="460.0">
          <children>
             <ImageView fitHeight="414.0" fitWidth="568.0" layoutX="-98.0" layoutY="-167.0">
                <image>
                   <Image url="@../Screen/LevelBG.png" />
                </image>
             </ImageView>
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="99.0" layoutY="102.0" prefHeight="74.0" prefWidth="208.0" text="Level 1" textAlignment="CENTER" textFill="#e2b032">
+            <Label fx:id="levelLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="99.0" layoutY="102.0" prefHeight="74.0" prefWidth="208.0" text="Level 1" textAlignment="CENTER" textFill="#e2b032">
                <font>
                   <Font name="HouseofTerror" size="70.0" />
                </font>
@@ -48,7 +48,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label alignment="CENTER" layoutX="199.0" layoutY="177.0" prefHeight="30.0" prefWidth="218.0" text="Continue to level 2?" textFill="#fff8f8">
+            <Label fx:id="continueLabel" alignment="CENTER" layoutX="199.0" layoutY="177.0" prefHeight="30.0" prefWidth="218.0" text="Continue to level 2?" textFill="#fff8f8">
                <font>
                   <Font size="20.0" />
                </font>
@@ -64,7 +64,7 @@
                </image>
             </ImageView>
             <Label fx:id="backToMenuLabel" layoutX="200.0" layoutY="253.0" onMouseClicked="#switchToMainMenu" styleClass="label-clickable" text="Back to Menu" textFill="WHITE" />
-            <Label fx:id="level2Label" alignment="CENTER" layoutX="317.0" layoutY="253.0" onMouseClicked="#startLevel2" prefHeight="19.0" prefWidth="77.0" styleClass="label-clickable" text="Level 2" textFill="WHITE" />
+            <Label alignment="CENTER" layoutX="317.0" layoutY="253.0" onMouseClicked="#onContinueClicked" prefHeight="19.0" prefWidth="77.0" styleClass="label-clickable" text="Continue" textFill="WHITE" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="losePane" layoutX="247.0" layoutY="-84.0" prefHeight="384.0" prefWidth="600">
@@ -99,7 +99,7 @@
                   <Font size="12.0" />
                </font>
             </Label>
-            <Label fx:id="replayLabel" alignment="CENTER" layoutX="239.0" layoutY="398.0" onMouseClicked="#replayLevel1" prefHeight="30.0" prefWidth="96.0" styleClass="label-clickable" text="Replay" textFill="#fff8f8">
+            <Label fx:id="replayLabel" alignment="CENTER" layoutX="239.0" layoutY="398.0" onMouseClicked="#onReplayClicked" prefHeight="30.0" prefWidth="96.0" styleClass="label-clickable" text="Replay" textFill="#fff8f8">
                <font>
                   <Font size="12.0" />
                </font>

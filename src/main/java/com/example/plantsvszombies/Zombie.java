@@ -29,8 +29,6 @@ public abstract class Zombie {
     protected Image deadImage;
     protected GameSceneController controller;
 
-
-
     public Zombie(String jumpGifPath, String walkGifPath, String eatGifPath, String deadGifPath, String soundPath, String eatingSoundPath, int HP, double speed, int x, int y, boolean isWalking, GameSceneController controller) {
         if (jumpGifPath != null) {
             this.jumpImage = new Image(getClass().getResource(jumpGifPath).toExternalForm());
@@ -62,7 +60,6 @@ public abstract class Zombie {
     public abstract String getZombieType();
 
     public void moveToPlant(Tile[][] grid) {
-        if (movement != null) return;
         movement = new Timeline(new KeyFrame(Duration.millis(50), e -> {
             boolean foundPlant = false;
 
@@ -87,15 +84,16 @@ public abstract class Zombie {
             }
 
             if (foundPlant) {
-                movement.stop();
-                movement = null;
-                startEating(); // Dừng di chuyển để ăn
+                startEating();
+                movement.stop(); // Dừng di chuyển để ăn
+
 
                 final Plant finalTargetPlant = targetPlant;
                 Timeline biteTimer = new Timeline();
                 biteTimer.getKeyFrames().add(new KeyFrame(Duration.seconds(1.5), ev -> {
                     if (finalTargetPlant instanceof Peashooter peashooter) {
                         peashooter.beEatenBy(this);
+
                         if (!peashooter.getNode().isVisible()) {
                             ev.consume(); // Ngừng timeline biteTimer
                             biteTimer.stop();

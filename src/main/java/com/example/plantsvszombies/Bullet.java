@@ -16,8 +16,8 @@ public class Bullet {
     private boolean hit = false;
     private Pane pane;
 
-    public Bullet(double x, double y, Pane pane, List<Zombie> zombies, GameSceneController controller) {
-        this.pane = pane;
+    public Bullet(double x, double y, Pane bulletLayer, List<Zombie> zombies, GameSceneController controller) {
+        this.pane = bulletLayer;
 
         // Load the bullet image
         Image bulletImage = new Image(getClass().getResourceAsStream("/Plants/pea.png"));
@@ -31,7 +31,7 @@ public class Bullet {
 
         bulletView.setUserData("bullet");
 
-        pane.getChildren().add(bulletView);
+        bulletLayer.getChildren().add(bulletView);
 
         // Di chuyển viên đạn sang phải (giữ nguyên trục y)
         TranslateTransition move = new TranslateTransition(Duration.seconds(2.5), bulletView);

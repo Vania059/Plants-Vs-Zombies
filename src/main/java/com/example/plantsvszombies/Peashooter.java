@@ -39,7 +39,8 @@ public class Peashooter extends Plant{
             Timeline firstBullet = new Timeline(new KeyFrame(Duration.seconds(0.5), ev -> {
                 double bulletX = imageView.getLayoutX() + imageView.getFitWidth();
                 double bulletY = imageView.getLayoutY() + imageView.getFitHeight() / 2 + 30; // chỉnh thấp 1 chút
-                new Bullet(bulletX, bulletY, pane, controller.getZombies(), controller);
+                new Bullet(bulletX, bulletY, controller.bulletLayer, controller.getZombies(), controller);
+
                 System.out.println("Peashooter shoots first bullet!");
 
                 // Sau viên đầu tiên, bắt đầu hành vi bắn định kỳ
@@ -71,7 +72,8 @@ public class Peashooter extends Plant{
         bulletFiring = new Timeline(new KeyFrame(Duration.seconds(1.2), e -> {
             double bulletX = imageView.getLayoutX() + imageView.getFitWidth();
             double bulletY = imageView.getLayoutY() + imageView.getFitHeight() / 2 + 30;
-            new Bullet(bulletX, bulletY, pane, controller.getZombies(), controller);
+            new Bullet(bulletX, bulletY, controller.bulletLayer, controller.getZombies(), controller);
+
         }));
         bulletFiring.setCycleCount(Timeline.INDEFINITE);
         bulletFiring.play();
