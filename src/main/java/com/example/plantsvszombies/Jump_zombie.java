@@ -70,9 +70,7 @@ public class Jump_zombie extends Zombie {
     public void die() {
         if (HP == 0) {
             imageView.setImage(deadImage);
-            if (Sound != null) Sound.stop();
-            if (eatingSound != null) eatingSound.stop();
-            if (movement != null) movement.stop();
+            cleanup();
 
             Timeline removeAfterDeath = new Timeline(new KeyFrame(Duration.seconds(1.5), e -> {
                 imageView.setVisible(false);

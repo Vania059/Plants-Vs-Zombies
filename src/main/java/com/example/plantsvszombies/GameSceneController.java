@@ -15,6 +15,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,10 +33,8 @@ public class GameSceneController implements Initializable {
     private AnchorPane winPane;
     @FXML
     private AnchorPane losePane;
-    @FXML
-    private Label level2Label;
-    @FXML
-    TextField usernameTextField;
+
+    private String username;
 
     private List<Zombie> zombies = new ArrayList<>();
     private Tile[][] grid = new Tile[5][9];
@@ -43,6 +42,15 @@ public class GameSceneController implements Initializable {
 
     private List<PlantCard> plantCards;
     private PlantCard selectedCard;
+
+    private enum Level {
+        LEVEL_1,
+        LEVEL_2
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -67,29 +75,40 @@ public class GameSceneController implements Initializable {
 
         updatePlantCards();
 
-        level1Pane.setTranslateY(540);
+        startLevel(Level.LEVEL_1);
+    }
 
+    private void showLevelIntro(String levelText, Runnable onFinished) {
+        level1Pane.setVisible(true); // Hiển thị Pane chứa dòng chữ "Level x"
+        level1Pane.toFront();        // Đưa nó lên trên cùng
+
+        // Giả sử label trong Pane có CSS class là ".label"
+        ((Label) level1Pane.lookup(".label")).setText(levelText);
+
+        // Hiệu ứng chạy lên
         TranslateTransition up = new TranslateTransition(Duration.seconds(1), level1Pane);
         up.setToY(0);
 
+        // Dừng 2 giây
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
+        // Hiệu ứng chạy xuống
         TranslateTransition down = new TranslateTransition(Duration.seconds(1), level1Pane);
         down.setToY(540);
+        down.setOnFinished(event -> {
+            level1Pane.setVisible(false);
+            if (onFinished != null) onFinished.run(); // Gọi spawnZombies sau hiệu ứng
+        });
 
-        down.setOnFinished(event -> level1Pane.setVisible(false));
-
+        // Chuỗi hiệu ứng
         up.setOnFinished(e -> pause.play());
         pause.setOnFinished(e -> down.play());
 
+        // Khởi động hiệu ứng
+        level1Pane.setTranslateY(540); // Ẩn Pane lúc ban đầu
         up.play();
-        level1Pane.toFront();
-        level1Pane.setVisible(true);
-
-        level2Label.setOnMouseClicked(event -> {
-            startLevel2();
-        });
     }
+
 
     private void setupGrid() {
         for (int row = 0; row < 5; row++) {
@@ -117,11 +136,11 @@ public class GameSceneController implements Initializable {
 
         // Tạo Timeline spawn zombie
         Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(20), e -> {
-            List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 200, 300, 400));
+            List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 200, 290, 380));
             Collections.shuffle(lanes);
             for (int i = 0; i < 3; i++) {
                 int y = lanes.get(i);
-                Jump_zombie zombie = new Jump_zombie(x, y, this);
+                Normal_zombie zombie = new Normal_zombie(x, y, this);
                 zombies.add(zombie);
                 gamePane.getChildren().add(zombie.getView());
                 zombie.startWalking();
@@ -137,11 +156,11 @@ public class GameSceneController implements Initializable {
             Media media = new Media(PlayGame.class.getResource("/Audio/zombies_coming.mp3").toString());
             MediaPlayer mediaPlayer = new MediaPlayer(media);
             mediaPlayer.play();
-            List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 200, 300, 400));
+            List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 200, 290, 380));
             Collections.shuffle(lanes);
             for (int i = 0; i < 3; i++) {
                 int y = lanes.get(i);
-                Jump_zombie zombie = new Jump_zombie(x, y, this);
+                Normal_zombie zombie = new Normal_zombie(x, y, this);
                 zombies.add(zombie);
                 gamePane.getChildren().add(zombie.getView());
                 zombie.startWalking();
@@ -285,13 +304,18 @@ public class GameSceneController implements Initializable {
         scale.play();
     }
 
-    public void switchToMainMenu(javafx.event.ActionEvent event) throws IOException {
+    public void switchToMainMenu(MouseEvent event) throws IOException {
+        for (Zombie zombie : zombies) {
+            zombie.cleanup();
+        }
+        zombies.clear();
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));
             Parent root = loader.load();
 
             UsernameController controller = loader.getController();
-            controller.display(usernameTextField.getText()); // Gửi username sang MainMenuController
+            controller.display(username); // Gửi username sang MainMenuController
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
@@ -305,17 +329,15 @@ public class GameSceneController implements Initializable {
         }
     }
 
-    public void startLevel2() {
-        // Ẩn winPane
-        winPane.setVisible(false);
-
-        // Xóa zombie cũ
+    private void resetGameState() {
+        // Remove zombies
         for (Zombie zombie : zombies) {
+            zombie.cleanup();
             gamePane.getChildren().remove(zombie.getView());
         }
         zombies.clear();
 
-        // Xóa plants trên grid
+        // Remove plants
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 9; col++) {
                 Tile tile = grid[row][col];
@@ -328,21 +350,50 @@ public class GameSceneController implements Initializable {
             }
         }
 
-        List<Node> nodesToRemove = new ArrayList<>();
+        // Remove bullets and sun tokens
+        List<Node> toRemove = new ArrayList<>();
         for (Node node : gamePane.getChildren()) {
             Object ud = node.getUserData();
             if ("bullet".equals(ud) || "suntoken".equals(ud)) {
-                nodesToRemove.add(node);
+                toRemove.add(node);
             }
         }
-        gamePane.getChildren().removeAll(nodesToRemove);
+        gamePane.getChildren().removeAll(toRemove);
 
-        // Reset sunPoints
-        sunPoints = 0; // hoặc theo ý bạn
+        // Reset sun points and UI
+        sunPoints = 0;
         sunLabel.setText("" + sunPoints);
+        selectedCard = null;
+        for (PlantCard card : plantCards) {
+            card.setSelected(false);
+        }
+    }
 
-        // Bắt đầu spawn zombie cho level 2
-        spawnZombiesLevel2();
+    private void startLevel(Level level) {
+        resetGameState(); // reset trạng thái game (đã tạo ở mục 1)
+
+        switch (level) {
+            case LEVEL_1:
+                showLevelIntro("Level 1", () -> spawnZombies());
+                break;
+            case LEVEL_2:
+                showLevelIntro("Level 2", () -> spawnZombiesLevel2());
+                break;
+            // Nếu có thêm LEVEL_3 thì thêm case vào đây
+        }
+    }
+
+    @FXML
+    private void startLevel2() {
+        winPane.setVisible(false); // Hide the win screen
+        startLevel(Level.LEVEL_2);
+    }
+
+    public void replayLevel1() {
+        // Logic để chơi lại Level 1
+        winPane.setVisible(false);
+        losePane.setVisible(false);
+        startLevel(Level.LEVEL_1);
     }
 
     private void spawnZombiesLevel2() {
@@ -365,6 +416,8 @@ public class GameSceneController implements Initializable {
             Jump_zombie jumpZombie = new Jump_zombie(x, yj, this);
             zombies.add(jumpZombie);
             gamePane.getChildren().add(jumpZombie.getView());
+            jumpZombie.jump();
+            jumpZombie.moveToPlant(grid);
             // jumpZombie sẽ tự startJumpingAndMoving trong constructor
         }));
         spawnTimeline.setCycleCount(7); // nhiều wave hơn level 1

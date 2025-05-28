@@ -70,7 +70,7 @@ public abstract class Zombie {
 
             Plant targetPlant = null;
 
-            if (row >= 0 && row < grid.length && imageView.getLayoutX() >= 95) {
+            if (row >= 0 && row < grid.length) {
                 for (Tile tile : grid[row]) {
                     Plant plant = tile.getPlant();
                     if (plant != null && plant.getNode() != null) {
@@ -154,6 +154,21 @@ public abstract class Zombie {
     public abstract void startWalking();
     public abstract void startEating();
     public abstract void die();
+    public void cleanup() {
+        if (Sound != null) {
+            try { Sound.stop(); } catch (Exception ignored) {}
+            try { Sound.dispose(); } catch (Exception ignored) {}
+        }
+        if (eatingSound != null) {
+            try { eatingSound.stop(); } catch (Exception ignored) {}
+            try { eatingSound.dispose(); } catch (Exception ignored) {}
+        }
+        if (movement != null) {
+            try { movement.stop(); } catch (Exception ignored) {}
+        }
+        // Nếu còn các Timeline khác như biteTimer, hãy lưu vào biến và stop ở đây
+
+    }
     public void takeDamage(int damage) {
         this.HP -= damage;
 

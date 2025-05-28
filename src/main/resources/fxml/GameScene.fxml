@@ -64,46 +64,46 @@
                </image>
             </ImageView>
             <Label fx:id="backToMenuLabel" layoutX="200.0" layoutY="253.0" onMouseClicked="#switchToMainMenu" styleClass="label-clickable" text="Back to Menu" textFill="WHITE" />
-            <Label fx:id="level2Label" alignment="CENTER" layoutX="344.0" layoutY="253.0" styleClass="label-clickable" text="Level 2" textFill="WHITE" />
-            <AnchorPane fx:id="losePane" layoutX="63.0" layoutY="-161.0" prefHeight="400" prefWidth="600">
-               <children>
-                  <ImageView fitHeight="400.0" fitWidth="600.0" layoutX="-67.0" layoutY="153.0">
-                     <image>
-                        <Image url="@../Screen/ResultBG.png" />
-                     </image>
-                  </ImageView>
-                  <Label layoutX="182.0" layoutY="277.0" text="YOU LOSE!!" textFill="#fff8f8">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" layoutX="124.0" layoutY="323.0" prefHeight="30.0" prefWidth="218.0" text="Play again?" textFill="#fff8f8">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <ImageView fitHeight="39.0" fitWidth="96.0" layoutX="124.0" layoutY="397.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Screen/Button.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="39.0" fitWidth="96.0" layoutX="239.0" layoutY="397.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Screen/Button.png" />
-                     </image>
-                  </ImageView>
-                  <Label fx:id="backTomenuLabel" alignment="CENTER" layoutX="124.0" layoutY="398.0" prefHeight="30.0" prefWidth="96.0" styleClass="label-clickable" text="Back to Menu" textFill="#fff8f8">
-                     <font>
-                        <Font size="12.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="replayLabel" alignment="CENTER" layoutX="239.0" layoutY="398.0" prefHeight="30.0" prefWidth="96.0" styleClass="label-clickable" text="Replay" textFill="#fff8f8">
-                     <font>
-                        <Font size="12.0" />
-                     </font>
-                  </Label>
-               </children>
-            </AnchorPane>
+            <Label fx:id="level2Label" alignment="CENTER" layoutX="317.0" layoutY="253.0" onMouseClicked="#startLevel2" prefHeight="19.0" prefWidth="77.0" styleClass="label-clickable" text="Level 2" textFill="WHITE" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="losePane" layoutX="247.0" layoutY="-84.0" prefHeight="384.0" prefWidth="600">
+         <children>
+            <ImageView fitHeight="400.0" fitWidth="600.0" layoutX="-67.0" layoutY="153.0">
+               <image>
+                  <Image url="@../Screen/ResultBG.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="182.0" layoutY="277.0" text="YOU LOSE!!" textFill="#fff8f8">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="124.0" layoutY="323.0" prefHeight="30.0" prefWidth="218.0" text="Play again?" textFill="#fff8f8">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="39.0" fitWidth="96.0" layoutX="124.0" layoutY="397.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Screen/Button.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="39.0" fitWidth="96.0" layoutX="239.0" layoutY="397.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Screen/Button.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="backTomenuLabel" alignment="CENTER" layoutX="124.0" layoutY="398.0" onMouseClicked="#switchToMainMenu" prefHeight="30.0" prefWidth="96.0" styleClass="label-clickable" text="Back to Menu" textFill="#fff8f8">
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="replayLabel" alignment="CENTER" layoutX="239.0" layoutY="398.0" onMouseClicked="#replayLevel1" prefHeight="30.0" prefWidth="96.0" styleClass="label-clickable" text="Replay" textFill="#fff8f8">
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>

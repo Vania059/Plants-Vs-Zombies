@@ -17,16 +17,23 @@ public class UsernameController {
     private Stage stage;
     private Scene scene;
     private Parent parent;
+    private String username;
 
     @FXML
     Label welcomeLabel;
 
-    public void display (String username) throws IOException {
+    public void display(String username) {
+        this.username = username;
         welcomeLabel.setText(username);
     }
 
     public void switchToGameScene (javafx.event.ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/GameScene.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GameScene.fxml"));
+        Parent root = loader.load();
+
+        GameSceneController controller = loader.getController();
+        controller.setUsername(username); // Truyền username
+
         scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/fxml/GameScene.css").toExternalForm());
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

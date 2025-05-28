@@ -22,6 +22,7 @@ public class SceneController {
     private Stage stage;
     private Scene scene;
     private Parent parent;
+    private String username;
 
     @FXML
     TextField usernameTextField;
@@ -62,6 +63,7 @@ public class SceneController {
                     showAlert("Username already exists!");
                 } else {
                     saveUsername(username);
+                    this.username = username;
                     switchToMainMenu(event);
                 }
 
@@ -86,6 +88,7 @@ public class SceneController {
 
         if (!username.isEmpty()) {
             if (isExistingUser(username)) {
+                this.username = username;
                 switchToMainMenu(event);
             } else {
                 showAlert("The username does not exist!");
@@ -103,7 +106,7 @@ public class SceneController {
 
             UsernameController controller = loader.getController();
 
-            controller.display(usernameTextField.getText());
+            controller.display(username);
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
