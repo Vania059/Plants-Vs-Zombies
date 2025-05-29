@@ -14,10 +14,7 @@ import java.util.Set;
 public class Cherrybomb extends Plant{
     private final ImageView imageView;
     private final GameSceneController controller;
-    private boolean isEaten = false;
 
-    // Danh sách zombie có thể ăn được
-    private final Set<String> validZombieTypes;
 
     public Cherrybomb(Tile tile, Pane pane, GameSceneController controller) {
         super(tile, pane);
@@ -29,11 +26,6 @@ public class Cherrybomb extends Plant{
         imageView.setPreserveRatio(true);
         imageView.setLayoutX(tile.getCenterX() - 50);
         imageView.setLayoutY(tile.getCenterY() - 50);
-
-        validZombieTypes = new HashSet<>();
-        validZombieTypes.add("normalZombie");
-        validZombieTypes.add("jumpZombie");
-        validZombieTypes.add("bossZombie");
 
         // Bước 2: Sau 2 giây, chuyển sang cherrybombpowie.gif
         Timeline changeToExplosion = new Timeline(new KeyFrame(Duration.seconds(1.5), e -> {
