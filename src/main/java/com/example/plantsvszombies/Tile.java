@@ -9,17 +9,16 @@ public class Tile {
     private static final int OFFSET_Y = 55;
     private static final int TILE_WIDTH = 85;
     private static final int TILE_HEIGHT = 95;
-    private int col;
-    private int row;
+    private final int col;
+    private final int row;
+    private final Rectangle tileRect;
     private Plant plant;
     private Pane pane;
-    private GameSceneController controller;
-    private Rectangle tileRect;
+
 
     public Tile(int col, int row, GameSceneController controller) {
         this.col = col;
         this.row = row;
-        this.controller = controller;
         this.pane = null;
 
         // Tạo ô gạch ở đúng vị trí layout
@@ -48,11 +47,11 @@ public class Tile {
     }
 
     public double getCenterX() {
-        return OFFSET_X + col * TILE_WIDTH + TILE_WIDTH / 2;
+        return OFFSET_X + col * TILE_WIDTH + (double) TILE_WIDTH / 2;
     }
 
     public double getCenterY() {
-        return OFFSET_Y + row * TILE_HEIGHT + TILE_HEIGHT / 2;
+        return OFFSET_Y + row * TILE_HEIGHT + (double) TILE_HEIGHT / 2;
     }
 
     public Plant getPlant() {

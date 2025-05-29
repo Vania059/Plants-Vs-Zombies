@@ -8,7 +8,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
@@ -46,8 +45,8 @@ public class GameSceneController implements Initializable {
 
     private String username;
 
-    private List<Zombie> zombies = new ArrayList<>();
-    private Tile[][] grid = new Tile[5][9];
+    private final List<Zombie> zombies = new ArrayList<>();
+    private final Tile[][] grid = new Tile[5][9];
     private int sunPoints = 0;
 
     private List<PlantCard> plantCards;
@@ -153,7 +152,6 @@ public class GameSceneController implements Initializable {
     private void spawnZombies() {
         int x = 1000; // vị trí ngoài scene
 
-        // Tạo Timeline spawn zombie
         Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(10), e -> {
             List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 190, 290, 370));
             Collections.shuffle(lanes);
@@ -523,7 +521,7 @@ public class GameSceneController implements Initializable {
             delay3.play();
         }));
 
-        spawnTimeline.setCycleCount(3); // 10 wave
+        spawnTimeline.setCycleCount(3);
         spawnTimeline.play();
     }
 }

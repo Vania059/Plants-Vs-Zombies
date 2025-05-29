@@ -16,7 +16,6 @@ import java.io.IOException;
 public class UsernameController {
     private Stage stage;
     private Scene scene;
-    private Parent parent;
     private String username;
 
     @FXML

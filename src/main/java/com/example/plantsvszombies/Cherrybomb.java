@@ -36,7 +36,7 @@ public class Cherrybomb extends Plant{
         validZombieTypes.add("bossZombie");
 
         // Bước 2: Sau 2 giây, chuyển sang cherrybombpowie.gif
-        Timeline changeToExplosion = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
+        Timeline changeToExplosion = new Timeline(new KeyFrame(Duration.seconds(1.5), e -> {
             Image explodeImage = new Image(getClass().getResource("/Plants/cherrybombpowie.gif").toExternalForm());
             imageView.setImage(explodeImage);
             imageView.setFitWidth(240); // To vừa 3 tile
@@ -74,7 +74,7 @@ public class Cherrybomb extends Plant{
     }));
 
         // Bước 3: Sau 3.2 giây (tức 2 giây sau khi nổ), ẩn luôn hình
-        Timeline disappear = new Timeline(new KeyFrame(Duration.seconds(3.2), e -> {
+        Timeline disappear = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
             imageView.setVisible(false);  // hoặc remove hẳn nếu muốn
             tile.setPlant(null);
             pane.getChildren().remove(getNode());
@@ -99,22 +99,5 @@ public class Cherrybomb extends Plant{
 
     @Override
     public void stopBehavior() {}
-
-    public void beEatenBy(Zombie zombie) {
-        String zombieType = zombie.getZombieType();
-        if (!validZombieTypes.contains(zombieType)) {
-            System.out.println("Unknown zombie type: " + zombieType);
-            return;
-        }
-
-        if (!isEaten) {
-            isEaten = true;
-            imageView.setVisible(false); // hoặc remove khỏi pane
-            tile.setPlant(null);
-            pane.getChildren().remove(getNode());
-            zombie.startWalking();
-            System.out.println("Cherrybomb was eaten by " + zombieType + " before exploding!");
-        }
-    }
 
 }

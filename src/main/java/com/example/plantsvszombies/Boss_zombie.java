@@ -48,7 +48,7 @@ public class Boss_zombie extends Zombie {
         if (HP == 0) {
             imageView.setImage(deadImage);
             cleanup();
-            Timeline removeAfterDeath = new Timeline(new KeyFrame(Duration.seconds(1.5), e -> {
+            Timeline removeAfterDeath = new Timeline(new KeyFrame(Duration.seconds(1.25), e -> {
                 imageView.setVisible(false);
             }));
             removeAfterDeath.setCycleCount(1);

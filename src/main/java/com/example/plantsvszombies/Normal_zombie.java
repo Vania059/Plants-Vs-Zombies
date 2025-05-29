@@ -52,10 +52,10 @@ public class Normal_zombie extends Zombie {
     public void die() {
         imageView.setImage(deadImage);
         cleanup();
-        Timeline removeAfterDeath = new Timeline(new KeyFrame(Duration.seconds(1.5), e -> {
+        Timeline removeAfterDeath = new Timeline(new KeyFrame(Duration.seconds(1.25), e -> {
             imageView.setVisible(false);
 
-            // 🔴 REMOVE zombie khỏi danh sách
+            // REMOVE zombie khỏi danh sách
             if (controller != null) {
                 controller.getZombies().remove(this); // remove khỏi danh sách
                 if (controller.getZombies().isEmpty()) {

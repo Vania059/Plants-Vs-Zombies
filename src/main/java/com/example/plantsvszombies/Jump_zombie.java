@@ -80,7 +80,7 @@ public class Jump_zombie extends Zombie {
             imageView.setImage(deadImage);
             cleanup();
 
-            Timeline removeAfterDeath = new Timeline(new KeyFrame(Duration.seconds(1.5), e -> {
+            Timeline removeAfterDeath = new Timeline(new KeyFrame(Duration.seconds(1.25), e -> {
                 imageView.setVisible(false);
             }));
             removeAfterDeath.setCycleCount(1);
