@@ -20,7 +20,7 @@ public class Normal_zombie extends Zombie {
                 "/Zombies/normal_zombie_die.gif",
                 "/Audio/normal_zombie_voice.mp3",
                 "/Audio/normal_zombie_eat.mp3",
-                100,
+                175,
                 0.5,
                 x,
                 y,

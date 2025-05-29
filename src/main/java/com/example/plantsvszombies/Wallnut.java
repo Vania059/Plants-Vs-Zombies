@@ -23,8 +23,8 @@ public class Wallnut extends Plant{
 
         biteLimits = new HashMap<>();
         biteLimits.put("bossZombie", 8);
-        biteLimits.put("jumpZombie", 10);
-        biteLimits.put("normalZombie", 12);
+        biteLimits.put("jumpZombie", 13);
+        biteLimits.put("normalZombie", 18);
 
         remainingHealth = biteLimits.get("normalZombie"); // default
     }

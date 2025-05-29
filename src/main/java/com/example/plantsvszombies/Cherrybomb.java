@@ -13,12 +13,13 @@ import java.util.Set;
 
 public class Cherrybomb extends Plant{
     private final ImageView imageView;
-    private final GameSceneController controller;
-
+    private final int TILE_WIDTH = 85;
+    private final int TILE_HEIGHT = 95;
+    private final int OFFSET_X = 95;
+    private final int OFFSET_Y = 55;
 
     public Cherrybomb(Tile tile, Pane pane, GameSceneController controller) {
         super(tile, pane);
-        this.controller = controller;
         // Bước 1: Hiển thị cherrybomb.gif
         Image idleImage = new Image(getClass().getResource("/Plants/cherrybomb.gif").toExternalForm());
         imageView = new ImageView(idleImage);
@@ -41,12 +42,13 @@ public class Cherrybomb extends Plant{
         int bombCol = tile.getCol();
 
         for (Zombie zombie : controller.getZombies()) {
-            double zombieX = zombie.getView().getLayoutX() + zombie.getView().getFitWidth() / 2;
-            double zombieY = zombie.getView().getLayoutY() + zombie.getView().getFitHeight() / 2;
-            int zCol = (int)((zombieX - 95) / 85);
-            int zRow = (int)((zombieY - 55) / 95);
+            double zombieCenterX = zombie.getView().getLayoutX() + zombie.getView().getFitWidth() / 2;
+            double zombieCenterY = zombie.getView().getLayoutY() + zombie.getView().getFitHeight() / 2;
+            int zCol = (int) ((zombieCenterX - OFFSET_X) / TILE_WIDTH);
+            int zRow = (int) ((zombieCenterY - OFFSET_Y) / TILE_HEIGHT);
 
             if (Math.abs(zRow - bombRow) <= 1 && Math.abs(zCol - bombCol) <= 1) {
+                zombie.HP = 0;
                 zombie.die();
             }
         }

@@ -164,7 +164,7 @@ public class GameSceneController implements Initializable {
                 zombie.moveToPlant(grid);
             }
         }));
-        spawnTimeline.setCycleCount(5); // hoặc Timeline.INDEFINITE nếu muốn lặp mãi
+        spawnTimeline.setCycleCount(10); // hoặc Timeline.INDEFINITE nếu muốn lặp mãi
 
         // Tạo PauseTransition 25s trước khi bắt đầu spawn
         PauseTransition delay = new PauseTransition(Duration.seconds(25));
@@ -448,7 +448,7 @@ public class GameSceneController implements Initializable {
         int x = 1000;
 
         // VD: spawn cả Normal_zombie và Jump_zombie
-        Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(10), e -> {
+        Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
             List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 190, 290, 370));
             Collections.shuffle(lanes);
             for (int i = 0; i < 1; i++) {
@@ -468,7 +468,7 @@ public class GameSceneController implements Initializable {
             zombie.moveToPlant(grid);
             // jumpZombie sẽ tự startJumpingAndMoving trong constructor
         }));
-        spawnTimeline.setCycleCount(6); // nhiều wave hơn level 1
+        spawnTimeline.setCycleCount(10); // nhiều wave hơn level 1
         spawnTimeline.play();
     }
 
