@@ -54,5 +54,11 @@ public class Boss_zombie extends Zombie {
             removeAfterDeath.setCycleCount(1);
             removeAfterDeath.play();
         }
+        if (controller != null) {
+            controller.getZombies().remove(this); // remove khỏi danh sách
+            if (controller.getZombies().isEmpty()) {
+                controller.showWinScreen(); // Hiện màn hình thắng
+            }
+        }
     }
 }

@@ -154,10 +154,10 @@ public class GameSceneController implements Initializable {
         int x = 1000; // vị trí ngoài scene
 
         // Tạo Timeline spawn zombie
-        Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(30), e -> {
+        Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(10), e -> {
             List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 190, 290, 370));
             Collections.shuffle(lanes);
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 1; i++) {
                 int y = lanes.get(i);
                 Normal_zombie zombie = new Normal_zombie(x, y, this);
                 zombies.add(zombie);
@@ -168,7 +168,7 @@ public class GameSceneController implements Initializable {
         }));
         spawnTimeline.setCycleCount(5); // hoặc Timeline.INDEFINITE nếu muốn lặp mãi
 
-        // Tạo PauseTransition 15s trước khi bắt đầu spawn
+        // Tạo PauseTransition 25s trước khi bắt đầu spawn
         PauseTransition delay = new PauseTransition(Duration.seconds(25));
         delay.setOnFinished(event -> {
             // Spawn lần đầu sau 15s
@@ -448,10 +448,10 @@ public class GameSceneController implements Initializable {
         int x = 1000;
 
         // VD: spawn cả Normal_zombie và Jump_zombie
-        Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(25), e -> {
+        Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(10), e -> {
             List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 190, 290, 370));
             Collections.shuffle(lanes);
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 1; i++) {
                 int y = lanes.get(i);
                 Normal_zombie zombie = new Normal_zombie(x, y, this);
                 zombies.add(zombie);
