@@ -427,6 +427,7 @@ public class GameSceneController implements Initializable {
 
     public void onContinueClicked() throws IOException {
         winPane.setVisible(false);
+        losePane.setVisible(false);
         if (currentLevel == Level.LEVEL_1) {
             startLevel(Level.LEVEL_2);
         } else if (currentLevel == Level.LEVEL_2) {
@@ -438,6 +439,7 @@ public class GameSceneController implements Initializable {
     }
 
     public void onReplayClicked() {
+        winPane.setVisible(false);
         losePane.setVisible(false);
         startLevel(currentLevel);  // reset lại đúng level hiện tại
     }
@@ -459,11 +461,11 @@ public class GameSceneController implements Initializable {
             }
             // Thêm Jump_zombie vào lane khác
             int yj = lanes.get(2);
-            Jump_zombie jumpZombie = new Jump_zombie(x, yj, this);
-            zombies.add(jumpZombie);
-            gamePane.getChildren().add(jumpZombie.getView());
-            jumpZombie.jump();
-            jumpZombie.moveToPlant(grid);
+            Jump_zombie zombie = new Jump_zombie(x, yj, this);
+            zombies.add(zombie);
+            gamePane.getChildren().add(zombie.getView());
+            zombie.startWalking();
+            zombie.moveToPlant(grid);
             // jumpZombie sẽ tự startJumpingAndMoving trong constructor
         }));
         spawnTimeline.setCycleCount(6); // nhiều wave hơn level 1
