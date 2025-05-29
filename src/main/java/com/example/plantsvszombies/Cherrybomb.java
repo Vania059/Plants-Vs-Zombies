@@ -58,19 +58,6 @@ public class Cherrybomb extends Plant{
                 zombie.die();
             }
         }
-
-        // Xử lý các plant (trừ chính Cherrybomb)
-        Tile[][] grid = controller.getGrid();
-        for (int r = Math.max(0, bombRow-1); r <= Math.min(4, bombRow+1); r++) {
-            for (int c = Math.max(0, bombCol - 1); c <= Math.min(8, bombCol + 1); c++) {
-                Plant p = grid[r][c].getPlant();
-                if (p != null && p != this) {
-                    grid[r][c].clearPlant();
-                    p.getNode().setVisible(false);
-                    pane.getChildren().remove(p.getNode());
-                }
-            }
-        }
     }));
 
         // Bước 3: Sau 3.2 giây (tức 2 giây sau khi nổ), ẩn luôn hình
