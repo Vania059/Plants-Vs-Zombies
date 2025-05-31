@@ -446,9 +446,7 @@ public class GameSceneController implements Initializable {
 
     public void spawnZombiesLevel2() {
         int x = 1000;
-
-        // VD: spawn cả Normal_zombie và Jump_zombie
-        Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
+        Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(10), e -> {
             List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 190, 290, 370));
             Collections.shuffle(lanes);
             for (int i = 0; i < 1; i++) {
@@ -469,61 +467,100 @@ public class GameSceneController implements Initializable {
             // jumpZombie sẽ tự startJumpingAndMoving trong constructor
         }));
         spawnTimeline.setCycleCount(10); // nhiều wave hơn level 1
-        spawnTimeline.play();
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(25));
+        delay.setOnFinished(event -> {
+            // Spawn lần đầu sau 15s
+            Media media = new Media(PlayGame.class.getResource("/Audio/zombies_coming.mp3").toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 190, 290, 380));
+            Collections.shuffle(lanes);
+            for (int i = 0; i < 3; i++) {
+                int y = lanes.get(i);
+                Normal_zombie zombie = new Normal_zombie(x, y, this);
+                zombies.add(zombie);
+                gamePane.getChildren().add(zombie.getView());
+                zombie.startWalking();
+                zombie.moveToPlant(grid);
+            }
+            spawnTimeline.play();
+        });
+
+        delay.play();
     }
 
     public void spawnZombiesLevel3() {
         int x = 1000;
 
-        // VD: spawn cả Normal_zombie và Jump_zombie
-        Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(25), e -> {
+        Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(10), e -> {
             List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 190, 290, 370));
             Collections.shuffle(lanes);
 
-            Random rand = new Random();
-            double t1 = 1 + rand.nextDouble() * 3;  // khoảng 1-4s
-            double t2 = 4 + rand.nextDouble() * 3;  // khoảng 4-7s
-            double t3 = 7 + rand.nextDouble() * 3;  // khoảng 7-10s
-
             // Normal_zombie
-            PauseTransition delay1 = new PauseTransition(Duration.seconds(t1));
-            delay1.setOnFinished(ev -> {
-                int y1 = lanes.get(0);
-                Normal_zombie normalZombie = new Normal_zombie(x, y1, this);
-                zombies.add(normalZombie);
-                gamePane.getChildren().add(normalZombie.getView());
-                normalZombie.startWalking();
-                normalZombie.moveToPlant(grid);
-            });
+            int y = lanes.get(0);
+            Normal_zombie normalZombie = new Normal_zombie(x, y, this);
+            zombies.add(normalZombie);
+            gamePane.getChildren().add(normalZombie.getView());
+            normalZombie.startWalking();
+            normalZombie.moveToPlant(grid);
 
             // Jump_zombie
-            PauseTransition delay2 = new PauseTransition(Duration.seconds(t2));
-            delay2.setOnFinished(ev -> {
-                int y2 = lanes.get(1);
-                Jump_zombie jumpZombie = new Jump_zombie(x, y2, this);
-                zombies.add(jumpZombie);
-                gamePane.getChildren().add(jumpZombie.getView());
-                jumpZombie.jump();
-                jumpZombie.moveToPlant(grid);
-            });
+            int yj = lanes.get(1);
+            Jump_zombie jumpZombie = new Jump_zombie(x, yj, this);
+            zombies.add(jumpZombie);
+            gamePane.getChildren().add(jumpZombie.getView());
+            jumpZombie.startWalking(); // hoặc jumpZombie.jump() nếu cần
+            jumpZombie.moveToPlant(grid);
 
             // Boss_zombie
-            PauseTransition delay3 = new PauseTransition(Duration.seconds(t3));
-            delay3.setOnFinished(ev -> {
-                int y3 = lanes.get(2);
-                Boss_zombie bossZombie = new Boss_zombie(x, y3, this);
-                zombies.add(bossZombie);
-                gamePane.getChildren().add(bossZombie.getView());
-                bossZombie.startWalking();
-                bossZombie.moveToPlant(grid);
-            });
-
-            delay1.play();
-            delay2.play();
-            delay3.play();
+            int yb = lanes.get(2);
+            Boss_zombie bossZombie = new Boss_zombie(x, yb, this);
+            zombies.add(bossZombie);
+            gamePane.getChildren().add(bossZombie.getView());
+            bossZombie.startWalking();
+            bossZombie.moveToPlant(grid);
         }));
 
-        spawnTimeline.setCycleCount(3);
-        spawnTimeline.play();
+        spawnTimeline.setCycleCount(8); // giống Level 2
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(25));
+        delay.setOnFinished(event -> {
+            // Spawn lần đầu sau 25s
+            Media media = new Media(PlayGame.class.getResource("/Audio/zombies_coming.mp3").toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+
+            List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 190, 290, 370));
+            Collections.shuffle(lanes);
+
+            // Spawn 1 Normal, 1 Jump, 1 Boss ngay ban đầu
+            int y1 = lanes.get(0);
+            int y2 = lanes.get(1);
+            int y3 = lanes.get(2);
+
+            Normal_zombie z1 = new Normal_zombie(x, y1, this);
+            zombies.add(z1);
+            gamePane.getChildren().add(z1.getView());
+            z1.startWalking();
+            z1.moveToPlant(grid);
+
+            Jump_zombie z2 = new Jump_zombie(x, y2, this);
+            zombies.add(z2);
+            gamePane.getChildren().add(z2.getView());
+            z2.startWalking(); // hoặc jump() tùy vào hành vi mặc định
+            z2.moveToPlant(grid);
+
+            Boss_zombie z3 = new Boss_zombie(x, y3, this);
+            zombies.add(z3);
+            gamePane.getChildren().add(z3.getView());
+            z3.startWalking();
+            z3.moveToPlant(grid);
+
+            spawnTimeline.play();
+        });
+
+        delay.play();
     }
+
 }
