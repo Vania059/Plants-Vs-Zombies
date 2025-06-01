@@ -55,7 +55,7 @@ public class PlayGame extends Application {
         alert.setTitle("Exit");
         alert.setHeaderText("Do you want to exit?");
 
-        if (alert.showAndWait().get() == ButtonType.OK){
+        if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
             stage.close();
         }
     }

@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.image.Image;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import static javafx.application.Application.launch;
@@ -72,7 +73,7 @@ public class Jump_zombie extends Zombie {
         isWalking = false;
         isJumping = false;
         imageView.setImage(eatImage);
-        if (eatingSound != null) {
+        if (eatingSound != null && eatingSound.getStatus() != MediaPlayer.Status.PLAYING) {
             eatingSound.play();
         } else {
             System.err.println("eatingSound is null when startEating is called.");
@@ -96,5 +97,6 @@ public class Jump_zombie extends Zombie {
                 controller.showWinScreen(); // Hiện màn hình thắng
             }
         }
+        if (jumpTimeline != null) jumpTimeline.stop();
     }
 }

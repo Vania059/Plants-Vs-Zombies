@@ -41,7 +41,16 @@ public class Boss_zombie extends Zombie {
     public void startEating() {
         isWalking = false;
         imageView.setImage(eatImage);
-        eatingSound.play();
+        // Kiểm tra kỹ null và trạng thái
+        if (eatingSound != null) {
+            try {
+                eatingSound.play();
+            } catch (Exception ex) {
+                System.err.println("Error eatingSound: " + ex.getMessage());
+            }
+        } else {
+            System.err.println("eatingSound is null in Boss_zombie.");
+        }
     }
     @Override
     public void die() {

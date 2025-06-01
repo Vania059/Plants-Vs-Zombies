@@ -41,18 +41,25 @@ public class Cherrybomb extends Plant{
         int bombRow = tile.getRow();
         int bombCol = tile.getCol();
 
-        for (Zombie zombie : controller.getZombies()) {
-            double zombieCenterX = zombie.getView().getLayoutX() + zombie.getView().getFitWidth() / 2;
-            double zombieCenterY = zombie.getView().getLayoutY() + zombie.getView().getFitHeight() / 2;
-            int zCol = (int) ((zombieCenterX - OFFSET_X) / TILE_WIDTH);
-            int zRow = (int) ((zombieCenterY - OFFSET_Y) / TILE_HEIGHT);
+            Set<Zombie> zombiesToExplode = new HashSet<>();
 
-            if (Math.abs(zRow - bombRow) <= 1 && Math.abs(zCol - bombCol) <= 1) {
+            for (Zombie zombie : controller.getZombies()) {
+                double zombieCenterX = zombie.getView().getLayoutX() + zombie.getView().getFitWidth() / 2;
+                double zombieCenterY = zombie.getView().getLayoutY() + zombie.getView().getFitHeight() / 2;
+                int zCol = (int) ((zombieCenterX - OFFSET_X) / TILE_WIDTH);
+                int zRow = (int) ((zombieCenterY - OFFSET_Y) / TILE_HEIGHT);
+
+                if (Math.abs(zRow - bombRow) <= 1 && Math.abs(zCol - bombCol) <= 1) {
+                    zombiesToExplode.add(zombie);
+                }
+            }
+
+            // ✅ Gọi die() sau vòng lặp để tránh lỗi
+            for (Zombie zombie : zombiesToExplode) {
                 zombie.HP = 0;
                 zombie.die();
             }
-        }
-    }));
+        }));
 
         // Bước 3: Sau 3.2 giây (tức 2 giây sau khi nổ), ẩn luôn hình
         Timeline disappear = new Timeline(new KeyFrame(Duration.seconds(2), e -> {

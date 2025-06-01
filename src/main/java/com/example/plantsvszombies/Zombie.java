@@ -2,6 +2,7 @@ package com.example.plantsvszombies;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
@@ -49,16 +50,20 @@ public abstract class Zombie {
         this.isWalking = isWalking;
         this.controller = controller;
 
-        Sound = createMediaPlayer(soundPath);
-        if (Sound != null) {
-            Sound.setCycleCount(MediaPlayer.INDEFINITE);
-            Sound.play();
-        }
+        Platform.runLater(() -> {
+            Sound = createMediaPlayer(soundPath);
+            if (Sound != null) {
+                Sound.setCycleCount(MediaPlayer.INDEFINITE);
+                Sound.play();
+            }
+        });
 
-        eatingSound = createMediaPlayer(eatingSoundPath);
-        if (eatingSound != null) {
-            eatingSound.setCycleCount(MediaPlayer.INDEFINITE);
-        }
+        Platform.runLater(() -> {
+            eatingSound = createMediaPlayer(eatingSoundPath);
+            if (eatingSound != null) {
+                eatingSound.setCycleCount(MediaPlayer.INDEFINITE);
+            }
+        });
     }
 
     // Load ảnh và lưu vào cache để dùng lại
@@ -225,10 +230,13 @@ public abstract class Zombie {
     }
     private MediaPlayer createMediaPlayer(String soundPath) {
         try {
+            System.out.println("Trying to load soundPath: " + soundPath);
             var resource = getClass().getResource(soundPath);
             if (resource == null) {
-                System.err.println("Sound file not found: " + soundPath);
+                System.err.println("Sound file NOT found: " + soundPath);
                 return null;
+            } else {
+                System.out.println("Sound file found: " + resource);
             }
             Media media = new Media(resource.toExternalForm());
             MediaPlayer player = new MediaPlayer(media);
@@ -240,7 +248,6 @@ public abstract class Zombie {
             media.setOnError(() -> {
                 System.err.println("Media error: " + media.getError());
             });
-
             return player;
         } catch (Exception e) {
             System.err.println("Exception loading media: " + soundPath);
