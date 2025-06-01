@@ -2,19 +2,20 @@ package com.example.plantsvszombies;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.effect.ColorAdjust;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public abstract class Zombie {
+    private static final Map<String, Image> imageCache = new HashMap<>();
+
     protected Image walkImage;
     protected Image eatImage;
     protected Image jumpImage;
@@ -31,12 +32,13 @@ public abstract class Zombie {
 
     public Zombie(String jumpGifPath, String walkGifPath, String eatGifPath, String deadGifPath, String soundPath, String eatingSoundPath, int HP, double speed, int x, int y, boolean isWalking, GameSceneController controller) {
         if (jumpGifPath != null) {
-            this.jumpImage = new Image(getClass().getResource(jumpGifPath).toExternalForm());
+            this.jumpImage = loadImageOnce(jumpGifPath);
         }
-        this.walkImage = new Image(getClass().getResource(walkGifPath).toExternalForm());
-        this.eatImage = new Image(getClass().getResource(eatGifPath).toExternalForm());
+        this.walkImage = loadImageOnce(walkGifPath);
+        this.eatImage = loadImageOnce(eatGifPath);
+        this.deadImage = loadImageOnce(deadGifPath);
+
         this.imageView = new ImageView(walkImage);
-        this.deadImage = new Image(getClass().getResource(deadGifPath).toExternalForm());
         this.imageView.setFitWidth(200);
         this.imageView.setFitHeight(200);
         this.imageView.setPreserveRatio(true);
@@ -46,18 +48,35 @@ public abstract class Zombie {
         this.speed = speed;
         this.isWalking = isWalking;
         this.controller = controller;
+
         Sound = createMediaPlayer(soundPath);
-        Sound.setCycleCount(MediaPlayer.INDEFINITE);
-        Sound.play();
+        if (Sound != null) {
+            Sound.setCycleCount(MediaPlayer.INDEFINITE);
+            Sound.play();
+        }
+
         eatingSound = createMediaPlayer(eatingSoundPath);
-        eatingSound.setCycleCount(MediaPlayer.INDEFINITE);
+        if (eatingSound != null) {
+            eatingSound.setCycleCount(MediaPlayer.INDEFINITE);
+        }
     }
 
+    // Load ảnh và lưu vào cache để dùng lại
+    private Image loadImageOnce(String path) {
+        if (!imageCache.containsKey(path)) {
+            Image img = new Image(getClass().getResource(path).toExternalForm());
+            imageCache.put(path, img);
+        }
+        return imageCache.get(path);
+    }
     public ImageView getView() {
         return imageView;
     }
 
     public abstract String getZombieType();
+    public abstract void startWalking();
+    public abstract void startEating();
+    public abstract void die();
 
     public void moveToPlant(Tile[][] grid) {
         movement = new Timeline(new KeyFrame(Duration.millis(50), e -> {
@@ -99,7 +118,13 @@ public abstract class Zombie {
                             biteTimer.stop();
                             isWalking = true;
                             imageView.setImage(walkImage);
-                            if (eatingSound != null) eatingSound.stop(); // Tắt âm thanh ăn
+                            if (eatingSound != null && eatingSound.getStatus() != MediaPlayer.Status.DISPOSED) {
+                                try {
+                                    eatingSound.stop();
+                                } catch (Exception ex) {
+                                    System.err.println("Error stopping eatingSound: " + ex.getMessage());
+                                }
+                            }
                             if (Sound != null) Sound.play(); // Phát lại âm thanh đi bộ
                             moveToPlant(grid); // Tiếp tục di chuyển
                         }
@@ -113,7 +138,14 @@ public abstract class Zombie {
                             biteTimer.stop();
                             isWalking = true;
                             imageView.setImage(walkImage);
-                            if (eatingSound != null) eatingSound.stop(); // Tắt âm thanh ăn
+                            if (eatingSound != null && eatingSound.getStatus() != MediaPlayer.Status.DISPOSED) {
+                                try {
+                                    eatingSound.stop();
+                                } catch (Exception ex) {
+                                    System.err.println("Error stopping eatingSound: " + ex.getMessage());
+                                }
+                            }
+
                             if (Sound != null) Sound.play(); // Phát lại âm thanh đi bộ
                             moveToPlant(grid); // Tiếp tục di chuyển
                         }
@@ -127,7 +159,14 @@ public abstract class Zombie {
                             biteTimer.stop();
                             isWalking = true;
                             imageView.setImage(walkImage);
-                            if (eatingSound != null) eatingSound.stop(); // Tắt âm thanh ăn
+                            if (eatingSound != null && eatingSound.getStatus() != MediaPlayer.Status.DISPOSED) {
+                                try {
+                                    eatingSound.stop();
+                                } catch (Exception ex) {
+                                    System.err.println("Error stopping eatingSound: " + ex.getMessage());
+                                }
+                            }
+
                             if (Sound != null) Sound.play(); // Phát lại âm thanh đi bộ
                             moveToPlant(grid); // Tiếp tục di chuyển
                         }
@@ -149,9 +188,6 @@ public abstract class Zombie {
         movement.setCycleCount(Timeline.INDEFINITE);
         movement.play();
     }
-    public abstract void startWalking();
-    public abstract void startEating();
-    public abstract void die();
     public void cleanup() {
         if (Sound != null) {
             try { Sound.stop(); } catch (Exception ignored) {}
@@ -164,8 +200,6 @@ public abstract class Zombie {
         if (movement != null) {
             try { movement.stop(); } catch (Exception ignored) {}
         }
-        // Nếu còn các Timeline khác như biteTimer, hãy lưu vào biến và stop ở đây
-
     }
     public void takeDamage(int damage) {
         this.HP -= damage;
@@ -191,11 +225,25 @@ public abstract class Zombie {
     }
     private MediaPlayer createMediaPlayer(String soundPath) {
         try {
-            String mediaURL = getClass().getResource(soundPath).toExternalForm();
-            Media media = new Media(mediaURL);
-            return new MediaPlayer(media);
+            var resource = getClass().getResource(soundPath);
+            if (resource == null) {
+                System.err.println("Sound file not found: " + soundPath);
+                return null;
+            }
+            Media media = new Media(resource.toExternalForm());
+            MediaPlayer player = new MediaPlayer(media);
+
+            player.setOnError(() -> {
+                System.err.println("MediaPlayer error: " + player.getError());
+            });
+
+            media.setOnError(() -> {
+                System.err.println("Media error: " + media.getError());
+            });
+
+            return player;
         } catch (Exception e) {
-            System.err.println("Could not load media: " + soundPath);
+            System.err.println("Exception loading media: " + soundPath);
             e.printStackTrace();
             return null;
         }

@@ -72,7 +72,11 @@ public class Jump_zombie extends Zombie {
         isWalking = false;
         isJumping = false;
         imageView.setImage(eatImage);
-        eatingSound.play();
+        if (eatingSound != null) {
+            eatingSound.play();
+        } else {
+            System.err.println("eatingSound is null when startEating is called.");
+        }
     }
     @Override
     public void die() {

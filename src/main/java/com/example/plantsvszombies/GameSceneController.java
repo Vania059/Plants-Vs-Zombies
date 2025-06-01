@@ -53,6 +53,7 @@ public class GameSceneController implements Initializable {
     private PlantCard selectedCard;
 
     private Level currentLevel = Level.LEVEL_1;
+    private Timeline spawnTimeline;
 
     private enum Level {
         LEVEL_1,
@@ -152,7 +153,7 @@ public class GameSceneController implements Initializable {
     private void spawnZombies() {
         int x = 1000; // vị trí ngoài scene
 
-        Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(10), e -> {
+        spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(10), e -> {
             List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 190, 290, 370));
             Collections.shuffle(lanes);
             for (int i = 0; i < 1; i++) {
@@ -341,10 +342,8 @@ public class GameSceneController implements Initializable {
         scale.play();
     }
 
-    public void switchToMainMenu(MouseEvent event) throws IOException {
-        for (Zombie zombie : zombies) {
-            zombie.cleanup();
-        }
+    public void switchToMainMenu() throws IOException {
+        for (Zombie zombie : zombies) zombie.cleanup();
         zombies.clear();
 
         try {
@@ -352,9 +351,9 @@ public class GameSceneController implements Initializable {
             Parent root = loader.load();
 
             UsernameController controller = loader.getController();
-            controller.display(username); // Gửi username sang MainMenuController
+            controller.display(username); // Gửi username
 
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage stage = (Stage) gamePane.getScene().getWindow(); // Lấy stage trực tiếp từ gamePane
 
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/fxml/MainMenu.css").toExternalForm());
@@ -407,6 +406,9 @@ public class GameSceneController implements Initializable {
     }
 
     private void startLevel(Level level) {
+        if (spawnTimeline != null) {
+            spawnTimeline.stop();
+        }
         currentLevel = level;
 
         resetGameState(); // reset trạng thái game (đã tạo ở mục 1)
@@ -434,7 +436,7 @@ public class GameSceneController implements Initializable {
             startLevel(Level.LEVEL_3);
         } else {
             // Nếu là level cuối rồi, có thể quay về menu hoặc làm gì đó
-            switchToMainMenu(null);
+            switchToMainMenu();
         }
     }
 
@@ -445,8 +447,11 @@ public class GameSceneController implements Initializable {
     }
 
     public void spawnZombiesLevel2() {
+        if (spawnTimeline != null) {
+            spawnTimeline.stop(); // Dừng timeline cũ nếu có
+        }
         int x = 1000;
-        Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(10), e -> {
+        spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(10), e -> {
             List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 190, 290, 370));
             Collections.shuffle(lanes);
             for (int i = 0; i < 1; i++) {
@@ -491,9 +496,12 @@ public class GameSceneController implements Initializable {
     }
 
     public void spawnZombiesLevel3() {
+        if (spawnTimeline != null) {
+            spawnTimeline.stop(); // Dừng timeline cũ nếu có
+        }
         int x = 1000;
 
-        Timeline spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(10), e -> {
+        spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(10), e -> {
             List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 190, 290, 370));
             Collections.shuffle(lanes);
 

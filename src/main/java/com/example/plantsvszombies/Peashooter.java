@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Peashooter extends Plant{
+    private static final Image IDLE_IMAGE = new Image(Peashooter.class.getResource("/Plants/peashooter.gif").toExternalForm());
+    private static final Image SHOOT_IMAGE = new Image(Peashooter.class.getResource("/Plants/peashootershoot.gif").toExternalForm());
+
     private final ImageView imageView;
     private final GameSceneController controller;
     private final Map<String, Integer> biteLimits;
@@ -22,28 +25,22 @@ public class Peashooter extends Plant{
         super(tile, pane);
         this.controller = controller;
         // Bước 1: Hiển thị ảnh thường
-        Image idleImage = new Image(getClass().getResource("/Plants/peashooter.gif").toExternalForm());
-        imageView = new ImageView(idleImage);
+        imageView = new ImageView(IDLE_IMAGE);
         imageView.setFitWidth(80);
         imageView.setPreserveRatio(true);
-        // 3 dòng dưới Ngọc thêm
         imageView.setLayoutX(tile.getCenterX() - 50);
         imageView.setLayoutY(tile.getCenterY() - 50);
 
 
         // Bước 2: Sau 2 giây, đổi thành peashootershoot.gif
         Timeline shootAnimation = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
-            Image shootImage = new Image(getClass().getResource("/Plants/peashootershoot.gif").toExternalForm());
-            imageView.setImage(shootImage);
+            imageView.setImage(SHOOT_IMAGE);
             // Tạo đạn tại thời điểm đổi ảnh
             Timeline firstBullet = new Timeline(new KeyFrame(Duration.seconds(0.5), ev -> {
                 double bulletX = imageView.getLayoutX() + imageView.getFitWidth();
-                double bulletY = imageView.getLayoutY() + imageView.getFitHeight() / 2 + 30; // chỉnh thấp 1 chút
+                double bulletY = imageView.getLayoutY() + imageView.getFitHeight() / 2 + 30;
                 new Bullet(bulletX, bulletY, controller.bulletLayer, controller.getZombies(), controller);
-
                 System.out.println("Peashooter shoots first bullet!");
-
-                // Sau viên đầu tiên, bắt đầu hành vi bắn định kỳ
                 startBehavior();
             }));
             firstBullet.setCycleCount(1);
