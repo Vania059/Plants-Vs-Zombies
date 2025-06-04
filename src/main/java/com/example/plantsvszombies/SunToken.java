@@ -59,7 +59,7 @@ public class SunToken {
         Random random = new Random();
 
         sunView.setLayoutY(0);
-        double distance = 200 + random.nextDouble() * (500 - 200);
+        double distance = 200 + random.nextDouble() * (500 - 150);
 
         TranslateTransition drop = new TranslateTransition(
                 Duration.seconds(3), sunView

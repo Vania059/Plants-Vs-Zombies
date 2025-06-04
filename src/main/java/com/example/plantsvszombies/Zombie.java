@@ -24,6 +24,7 @@ public abstract class Zombie {
     protected double speed;
     protected boolean isWalking;
     protected Timeline movement;
+    protected Timeline biteTimer;
     protected MediaPlayer Sound;
     protected String soundPath;
     protected MediaPlayer eatingSound;
@@ -115,8 +116,15 @@ public abstract class Zombie {
                 movement.stop(); // Dừng di chuyển để ăn
 
                 final Plant finalTargetPlant = targetPlant;
-                Timeline biteTimer = new Timeline();
+                if (biteTimer != null) biteTimer.stop(); // Dừng timer cũ nếu có
+                biteTimer = new Timeline();
                 biteTimer.getKeyFrames().add(new KeyFrame(Duration.seconds(1.5), ev -> {
+                    // Kiểm tra zombie còn sống không
+                    if (this.HP <= 0 || !imageView.isVisible()) {
+                        biteTimer.stop();
+                        return;
+                    }
+
                     if (finalTargetPlant instanceof Peashooter peashooter) {
                         peashooter.beEatenBy(this);
 
@@ -158,8 +166,6 @@ public abstract class Zombie {
                             moveToPlant(grid); // Tiếp tục di chuyển
                         }
                     }
-
-
                 }));
                 biteTimer.setCycleCount(Timeline.INDEFINITE);
                 biteTimer.play();
