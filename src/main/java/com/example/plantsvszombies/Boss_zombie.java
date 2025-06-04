@@ -2,8 +2,8 @@ package com.example.plantsvszombies;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
-import java.awt.*;
 
 public class Boss_zombie extends Zombie {
     int x;
@@ -41,14 +41,19 @@ public class Boss_zombie extends Zombie {
     public void startEating() {
         isWalking = false;
         imageView.setImage(eatImage);
-        // Kiểm tra kỹ null và trạng thái
-        if (eatingSound != null) {
+        if (eatingSound != null &&
+                eatingSound.getStatus() != MediaPlayer.Status.PLAYING &&
+                eatingSound.getStatus() != MediaPlayer.Status.DISPOSED &&
+                eatingSound.getStatus() != MediaPlayer.Status.UNKNOWN) {
             try {
                 eatingSound.play();
             } catch (Exception ex) {
-                System.err.println("Error eatingSound: " + ex.getMessage());
+                System.err.println("Error when playing eatingSound: " + ex.getMessage());
+                if (eatingSound.getError() != null) {
+                    System.err.println("MediaPlayer error: " + eatingSound.getError());
+                }
             }
-        } else {
+        } else if (eatingSound == null) {
             System.err.println("eatingSound is null in Boss_zombie.");
         }
     }

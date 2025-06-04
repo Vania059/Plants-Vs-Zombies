@@ -2,9 +2,6 @@ package com.example.plantsvszombies;
 
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 
 public abstract class Plant {
     protected Pane pane; // để sinh đạn hoặc sun

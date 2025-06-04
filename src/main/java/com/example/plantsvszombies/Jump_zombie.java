@@ -2,12 +2,8 @@ package com.example.plantsvszombies;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Application;
-import javafx.scene.image.Image;
 import javafx.scene.media.MediaPlayer;
-import javafx.stage.Stage;
 import javafx.util.Duration;
-import static javafx.application.Application.launch;
 
 public class Jump_zombie extends Zombie {
     private Timeline jumpTimeline;
@@ -63,6 +59,8 @@ public class Jump_zombie extends Zombie {
             isWalking = true;
             isEating = false;
             imageView.setImage(walkImage);
+            stopEatingSound();
+            playWalkSound();
         }
     }
     @Override
@@ -73,15 +71,26 @@ public class Jump_zombie extends Zombie {
         isWalking = false;
         isJumping = false;
         imageView.setImage(eatImage);
-        if (eatingSound != null && eatingSound.getStatus() != MediaPlayer.Status.PLAYING) {
-            eatingSound.play();
-        } else {
+
+        if (eatingSound != null &&
+                eatingSound.getStatus() != MediaPlayer.Status.PLAYING &&
+                eatingSound.getStatus() != MediaPlayer.Status.DISPOSED &&
+                eatingSound.getStatus() != MediaPlayer.Status.UNKNOWN) {
+            try {
+                eatingSound.play();
+            } catch (Exception ex) {
+                System.err.println("Error when playing eatingSound: " + ex.getMessage());
+                if (eatingSound.getError() != null) {
+                    System.err.println("MediaPlayer error: " + eatingSound.getError());
+                }
+            }
+        } else if (eatingSound == null) {
             System.err.println("eatingSound is null when startEating is called.");
         }
     }
     @Override
     public void die() {
-        if (HP == 0) {
+        if (HP <= 0) {
             imageView.setImage(deadImage);
             cleanup();
 

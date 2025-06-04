@@ -4,8 +4,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
-import static javafx.application.Application.launch;
-
 public class Normal_zombie extends Zombie {
     private boolean isEating = false;
     int x;
@@ -46,7 +44,21 @@ public class Normal_zombie extends Zombie {
         isWalking = false;
         isEating = true;
         imageView.setImage(eatImage);
-        eatingSound.play();
+        if (eatingSound != null &&
+                eatingSound.getStatus() != javafx.scene.media.MediaPlayer.Status.PLAYING &&
+                eatingSound.getStatus() != javafx.scene.media.MediaPlayer.Status.DISPOSED &&
+                eatingSound.getStatus() != javafx.scene.media.MediaPlayer.Status.UNKNOWN) {
+            try {
+                eatingSound.play();
+            } catch (Exception ex) {
+                System.err.println("Error when playing eatingSound: " + ex.getMessage());
+                if (eatingSound.getError() != null) {
+                    System.err.println("MediaPlayer error: " + eatingSound.getError());
+                }
+            }
+        } else if (eatingSound == null) {
+            System.err.println("eatingSound is null when startEating is called.");
+        }
     }
     @Override
     public void die() {
@@ -62,7 +74,6 @@ public class Normal_zombie extends Zombie {
                     controller.showWinScreen(); // Hiện màn hình thắng
                 }
             }
-
         }));
         removeAfterDeath.setCycleCount(1);
         removeAfterDeath.play();

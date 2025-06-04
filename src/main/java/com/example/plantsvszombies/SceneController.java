@@ -21,7 +21,6 @@ import java.util.List;
 public class SceneController {
     private Stage stage;
     private Scene scene;
-    private Parent parent;
     private String username;
 
     @FXML

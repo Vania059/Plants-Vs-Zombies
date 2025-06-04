@@ -2,7 +2,6 @@ package com.example.plantsvszombies;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
@@ -50,20 +49,24 @@ public abstract class Zombie {
         this.isWalking = isWalking;
         this.controller = controller;
 
-        Platform.runLater(() -> {
-            Sound = createMediaPlayer(soundPath);
-            if (Sound != null) {
-                Sound.setCycleCount(MediaPlayer.INDEFINITE);
+        Sound = createMediaPlayer(soundPath);
+        if (Sound != null) {
+            Sound.setCycleCount(MediaPlayer.INDEFINITE);
+            try {
                 Sound.play();
+            } catch (Exception ex) {
+                System.err.println("Error playing Sound: " + ex.getMessage());
+                if (Sound.getError() != null) {
+                    System.err.println("MediaPlayer error: " + Sound.getError());
+                }
             }
-        });
+        }
 
-        Platform.runLater(() -> {
-            eatingSound = createMediaPlayer(eatingSoundPath);
-            if (eatingSound != null) {
-                eatingSound.setCycleCount(MediaPlayer.INDEFINITE);
-            }
-        });
+        eatingSound = createMediaPlayer(eatingSoundPath);
+        if (eatingSound != null) {
+            eatingSound.setCycleCount(MediaPlayer.INDEFINITE);
+        }
+
     }
 
     // Load ảnh và lưu vào cache để dùng lại
@@ -111,7 +114,6 @@ public abstract class Zombie {
                 startEating();
                 movement.stop(); // Dừng di chuyển để ăn
 
-
                 final Plant finalTargetPlant = targetPlant;
                 Timeline biteTimer = new Timeline();
                 biteTimer.getKeyFrames().add(new KeyFrame(Duration.seconds(1.5), ev -> {
@@ -123,14 +125,8 @@ public abstract class Zombie {
                             biteTimer.stop();
                             isWalking = true;
                             imageView.setImage(walkImage);
-                            if (eatingSound != null && eatingSound.getStatus() != MediaPlayer.Status.DISPOSED) {
-                                try {
-                                    eatingSound.stop();
-                                } catch (Exception ex) {
-                                    System.err.println("Error stopping eatingSound: " + ex.getMessage());
-                                }
-                            }
-                            if (Sound != null) Sound.play(); // Phát lại âm thanh đi bộ
+                            stopEatingSound();
+                            playWalkSound();
                             moveToPlant(grid); // Tiếp tục di chuyển
                         }
                     }
@@ -143,15 +139,8 @@ public abstract class Zombie {
                             biteTimer.stop();
                             isWalking = true;
                             imageView.setImage(walkImage);
-                            if (eatingSound != null && eatingSound.getStatus() != MediaPlayer.Status.DISPOSED) {
-                                try {
-                                    eatingSound.stop();
-                                } catch (Exception ex) {
-                                    System.err.println("Error stopping eatingSound: " + ex.getMessage());
-                                }
-                            }
-
-                            if (Sound != null) Sound.play(); // Phát lại âm thanh đi bộ
+                            stopEatingSound();
+                            playWalkSound();
                             moveToPlant(grid); // Tiếp tục di chuyển
                         }
                     }
@@ -164,15 +153,8 @@ public abstract class Zombie {
                             biteTimer.stop();
                             isWalking = true;
                             imageView.setImage(walkImage);
-                            if (eatingSound != null && eatingSound.getStatus() != MediaPlayer.Status.DISPOSED) {
-                                try {
-                                    eatingSound.stop();
-                                } catch (Exception ex) {
-                                    System.err.println("Error stopping eatingSound: " + ex.getMessage());
-                                }
-                            }
-
-                            if (Sound != null) Sound.play(); // Phát lại âm thanh đi bộ
+                            stopEatingSound();
+                            playWalkSound();
                             moveToPlant(grid); // Tiếp tục di chuyển
                         }
                     }
@@ -193,19 +175,65 @@ public abstract class Zombie {
         movement.setCycleCount(Timeline.INDEFINITE);
         movement.play();
     }
-    public void cleanup() {
-        if (Sound != null) {
-            try { Sound.stop(); } catch (Exception ignored) {}
-            try { Sound.dispose(); } catch (Exception ignored) {}
-        }
-        if (eatingSound != null) {
-            try { eatingSound.stop(); } catch (Exception ignored) {}
-            try { eatingSound.dispose(); } catch (Exception ignored) {}
-        }
-        if (movement != null) {
-            try { movement.stop(); } catch (Exception ignored) {}
+
+    protected void stopEatingSound() {
+        if (eatingSound != null &&
+                eatingSound.getStatus() != MediaPlayer.Status.DISPOSED &&
+                eatingSound.getStatus() != MediaPlayer.Status.UNKNOWN &&
+                eatingSound.getStatus() != MediaPlayer.Status.STOPPED) {
+            try {
+                eatingSound.stop();
+            } catch (Exception ex) {
+                System.err.println("Error stopping eatingSound: " + ex.getMessage());
+                if (eatingSound.getError() != null) {
+                    System.err.println("MediaPlayer error: " + eatingSound.getError());
+                }
+            }
         }
     }
+
+    protected void playWalkSound() {
+        if (Sound != null
+                && Sound.getStatus() != MediaPlayer.Status.DISPOSED
+                && Sound.getStatus() != MediaPlayer.Status.UNKNOWN
+                && Sound.getStatus() != MediaPlayer.Status.PLAYING) {
+            try {
+                Sound.play();
+            } catch (Exception ex) {
+                System.err.println("Error playing Sound: " + ex.getMessage());
+                if (Sound.getError() != null) {
+                    System.err.println("MediaPlayer error: " + Sound.getError());
+                }
+            }
+        }
+    }
+
+    public void cleanup() {
+        cleanupMediaPlayer(Sound);
+        cleanupMediaPlayer(eatingSound);
+        if (movement != null) {
+            try { movement.stop(); } catch (Exception ex) { System.err.println("Error stopping movement: " + ex.getMessage()); }
+        }
+    }
+
+    private void cleanupMediaPlayer(MediaPlayer player) {
+        if (player == null) return;
+        try {
+            MediaPlayer.Status status = player.getStatus();
+            if (player.getError() == null &&
+                    (status == MediaPlayer.Status.READY ||
+                            status == MediaPlayer.Status.PLAYING ||
+                            status == MediaPlayer.Status.PAUSED ||
+                            status == MediaPlayer.Status.STOPPED)) {
+                try {
+                    player.dispose();
+                } catch (Exception ex) {
+                    System.err.println("Error disposing MediaPlayer: " + ex.getMessage());
+                }
+            }
+        } catch (Exception ex) {}
+    }
+
     public void takeDamage(int damage) {
         this.HP -= damage;
 
@@ -228,15 +256,14 @@ public abstract class Zombie {
         flashTimeline.setCycleCount(1);
         flashTimeline.play();
     }
+
     private MediaPlayer createMediaPlayer(String soundPath) {
         try {
-            System.out.println("Trying to load soundPath: " + soundPath);
+            if (soundPath == null) return null;
             var resource = getClass().getResource(soundPath);
             if (resource == null) {
                 System.err.println("Sound file NOT found: " + soundPath);
                 return null;
-            } else {
-                System.out.println("Sound file found: " + resource);
             }
             Media media = new Media(resource.toExternalForm());
             MediaPlayer player = new MediaPlayer(media);
