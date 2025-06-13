@@ -70,10 +70,6 @@ public class Tile {
         return plant != null;
     }
 
-    public void clearPlant() {
-        this.plant = null;
-    }
-
     public Pane getPane() {
         return pane;
     }

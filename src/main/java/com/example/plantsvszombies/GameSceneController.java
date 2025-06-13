@@ -149,49 +149,6 @@ public class GameSceneController implements Initializable {
         return grid;
     }
 
-    private void spawnZombies() {
-        int x = 1000; // vị trí ngoài scene
-
-        spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(10), e -> {
-            List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 190, 290, 370));
-            Collections.shuffle(lanes);
-            for (int i = 0; i < 1; i++) {
-                int y = lanes.get(i);
-                Normal_zombie zombie = new Normal_zombie(x, y, this);
-                zombies.add(zombie);
-                gamePane.getChildren().add(zombie.getView());
-                zombie.startWalking();
-                zombie.moveToPlant(grid);
-            }
-        }));
-        spawnTimeline.setCycleCount(10); // hoặc Timeline.INDEFINITE nếu muốn lặp mãi
-
-        // Tạo PauseTransition 25s trước khi bắt đầu spawn
-        PauseTransition delay = new PauseTransition(Duration.seconds(25));
-        delay.setOnFinished(event -> {
-            // Spawn lần đầu sau 15s
-            Media media = new Media(PlayGame.class.getResource("/Audio/zombies_coming.mp3").toString());
-            MediaPlayer mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.play();
-            List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 190, 290, 380));
-            Collections.shuffle(lanes);
-            for (int i = 0; i < 3; i++) {
-                int y = lanes.get(i);
-                Normal_zombie zombie = new Normal_zombie(x, y, this);
-                zombies.add(zombie);
-                gamePane.getChildren().add(zombie.getView());
-                zombie.startWalking();
-                zombie.moveToPlant(grid);
-            }
-
-            // Bắt đầu Timeline sau lần spawn đầu tiên
-            spawnTimeline.play();
-        });
-
-        // Bắt đầu đếm 15s
-        delay.play();
-    }
-
     public List<Zombie> getZombies() {
         return zombies;
     }
@@ -443,6 +400,49 @@ public class GameSceneController implements Initializable {
         winPane.setVisible(false);
         losePane.setVisible(false);
         startLevel(currentLevel);  // reset lại đúng level hiện tại
+    }
+
+    private void spawnZombies() {
+        int x = 1000; // vị trí ngoài scene
+
+        spawnTimeline = new Timeline(new KeyFrame(Duration.seconds(10), e -> {
+            List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 190, 290, 370));
+            Collections.shuffle(lanes);
+            for (int i = 0; i < 1; i++) {
+                int y = lanes.get(i);
+                Normal_zombie zombie = new Normal_zombie(x, y, this);
+                zombies.add(zombie);
+                gamePane.getChildren().add(zombie.getView());
+                zombie.startWalking();
+                zombie.moveToPlant(grid);
+            }
+        }));
+        spawnTimeline.setCycleCount(10); // hoặc Timeline.INDEFINITE nếu muốn lặp mãi
+
+        // Tạo PauseTransition 25s trước khi bắt đầu spawn
+        PauseTransition delay = new PauseTransition(Duration.seconds(25));
+        delay.setOnFinished(event -> {
+            // Spawn lần đầu sau 15s
+            Media media = new Media(PlayGame.class.getResource("/Audio/zombies_coming.mp3").toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            List<Integer> lanes = new ArrayList<>(Arrays.asList(0, 100, 190, 290, 380));
+            Collections.shuffle(lanes);
+            for (int i = 0; i < 3; i++) {
+                int y = lanes.get(i);
+                Normal_zombie zombie = new Normal_zombie(x, y, this);
+                zombies.add(zombie);
+                gamePane.getChildren().add(zombie.getView());
+                zombie.startWalking();
+                zombie.moveToPlant(grid);
+            }
+
+            // Bắt đầu Timeline sau lần spawn đầu tiên
+            spawnTimeline.play();
+        });
+
+        // Bắt đầu đếm 15s
+        delay.play();
     }
 
     public void spawnZombiesLevel2() {

@@ -26,7 +26,6 @@ public abstract class Zombie {
     protected Timeline movement;
     protected Timeline biteTimer;
     protected MediaPlayer Sound;
-    protected String soundPath;
     protected MediaPlayer eatingSound;
     protected Image deadImage;
     protected GameSceneController controller;
